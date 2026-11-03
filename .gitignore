@@ -1,0 +1,6 @@
+# How each part script was last settled: a cache, written as it is built.
+*.solved.json
+*.drawn.json
+
+# Your layer over a model: yours, not shared.
+*.user.gen.ts
