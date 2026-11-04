@@ -15,7 +15,7 @@
 
 import { part, node, free, plane, support, placed, joints, frame, fit, areaLoad, cases, must, on, lumber, box, nominal, DFL, add, inch, ft, mm, psf } from "fettled";
 import { perimeter, framing } from "fettled/walls";
-import { floor, stairs } from "fettled/framing";
+import { floor, stairs, joists } from "fettled/framing";
 
 const stud = lumber(nominal["2x4"], DFL.No2), joist = lumber(nominal["2x12"], DFL.No2), stringer = lumber(nominal["2x12"], DFL.No2);
 const tread = box("2x12 tread", { thickness: inch(11.25), depth: inch(1.5), material: DFL.No2 });
@@ -29,11 +29,7 @@ export default part("a stairwell and stairs", (s) => {
   // The floor: its joists along y, across x; its underside on the walls' plates (found, sliding up to them).
   const rise = free(mm(0));
   const corner = node(0, 0, rise);
-  const f = floor("floor", {
-    width: wide, length: deep, spacing: inch(16), stock: joist,
-    opening: { across: inch(opening.across), along: inch(opening.along), width: inch(opening.width), length: inch(opening.length) },
-    at: placed({ joint: joints.slider([0, 0, 1], rise) }),
-  });
+  const f = floor("floor", { width: wide, length: deep, opening: { across: inch(opening.across), along: inch(opening.along), width: inch(opening.width), length: inch(opening.length) }, at: placed({ joint: joints.slider([0, 0, 1], rise) }), build: [joists(joist, { spacing: inch(16) })] });
   // The flight: up the middle of the opening, its head at the opening's far end, as high as the floor's top.
   const up = stairs("stairs", { rise: add(height, joist.depth, deck), width: inch(flight), stringer, tread });
   const going = 13 * 10;

@@ -9,7 +9,7 @@
 // across the 12', 6 in 12, 12" past the walls, every 24". The floor's dead load 10 psf and live load 40 psf.
 
 import { part, node, free, plane, support, areaLoad, cases, must, on, offset, placed, joints, frame, add, sub, div, fit, lumber, nominal, DFL, inch, ft, mm, psf } from "fettled";
-import { floor, fink } from "fettled/framing";
+import { floor, fink, joists } from "fettled/framing";
 import { row } from "fettled/runs";
 import { perimeter, framing } from "fettled/walls";
 
@@ -27,7 +27,7 @@ export default part("a second storey", (s) => {
   // the ground floor's plates.
   const rise = free(mm(0));
   const corner = node(0, 0, rise);
-  const f = floor("floor", { width: deep, length: wide, spacing: inch(16), stock: joist, at: placed({ origin: [0, deep, 0], x: [0, -1, 0], y: [1, 0, 0], joint: joints.slider([0, 0, 1], rise) }) });
+  const f = floor("floor", { width: deep, length: wide, at: placed({ origin: [0, deep, 0], x: [0, -1, 0], y: [1, 0, 0], joint: joints.slider([0, 0, 1], rise) }), build: [joists(joist, { spacing: inch(16) })] });
   // The upper walls: on the deck, which is on the joists.
   const lift = free(mm(0));
   const base = node(0, 0, lift);

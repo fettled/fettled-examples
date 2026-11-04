@@ -22,8 +22,8 @@
 
 import { part, node, sub, lumber, nominal, DFL, mm, inch, ft, join } from "fettled";
 import { slab } from "fettled/framing";
-import { wall, perimeter, panels, framing } from "fettled/walls";
-import { sheets } from "fettled/products";
+import { wall, perimeter, framing } from "fettled/walls";
+import { sheets, panels } from "fettled/products";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
 const header = lumber(nominal["2x10"], DFL.No2, { plies: 2 });
