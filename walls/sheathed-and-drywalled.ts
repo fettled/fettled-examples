@@ -37,7 +37,7 @@ export default part("sheathed and drywalled", () => {
   // (At each corner, the side's sheathing runs past over the front's or the back's edge: so the front's and the back's,
   // 16' long, are four whole sheets each, not four and a sliver.)
   const walls = perimeter("walls", { corners, legs: [legs.front, legs.side, legs.back, legs.side], names: ["front", "right", "back", "left"], layers: [undefined, "b", undefined, "b"] });
-  const partition = wall("partition", { from: node(mm(3044.5), twoBySix.depth, 0), to: node(mm(3044.5), sub(deep, twoBySix.depth), 0), stock: twoByFour, height, spacing: inch(16), outside: inside, inside });
+  const partition = wall("partition", { from: node(mm(3044.45), twoBySix.depth, 0), to: node(mm(3044.45), sub(deep, twoBySix.depth), 0), stock: twoByFour, height, spacing: inch(16), outside: inside, inside });
   const tees = [tee(walls.legs[0], partition, mm(3000)), tee(walls.legs[2], partition, mm(4876.8 - 3000), { end: "end" })];
   return { slab: floor, walls, partition, tees };
 });
