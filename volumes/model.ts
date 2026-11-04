@@ -2,7 +2,8 @@
 // which opens by itself (as any part does) or may be copied out to start from.
 //
 // Solids beyond members and plates: an extrusion ended on a face, a revolve, a sweep, a loft, a block carved by
-// another, a clearance kept between faces (docs/volumes-plan.md), and sweeps along nodes bent round their corners.
+// another, a clearance kept between faces (docs/volumes-plan.md), sweeps along nodes bent round their corners, and
+// ribbon cables bent without stretching.
 
 import { part, place, placed, mm } from "fettled";
 import bracketExtrudedToAPlate from "./bracket-extruded-to-a-plate";
@@ -12,6 +13,7 @@ import taperedPlinth from "./tapered-plinth";
 import wheelWell from "./wheel-well";
 import clearance from "./clearance";
 import downpipeAndCable from "./downpipe-and-cable";
+import ribbonCable from "./ribbon-cable";
 
 export default part("volumes", {
   bracketExtrudedToAPlate: place(bracketExtrudedToAPlate, placed({ origin: [mm(1), mm(0), 0] })),
@@ -21,4 +23,5 @@ export default part("volumes", {
   wheelWell: place(wheelWell, placed({ origin: [mm(0), mm(110), 0] })),
   clearance: place(clearance, placed({ origin: [mm(101), mm(90), 0] })),
   downpipeAndCable: place(downpipeAndCable, placed({ origin: [mm(500), 0, 0] })),
+  ribbonCable: place(ribbonCable, placed({ origin: [mm(260), mm(-150), mm(120)] })),
 });
