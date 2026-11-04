@@ -9,7 +9,7 @@
 import { part, node, plane, support, frame, neg, areaLoad, cases, lumber, nominal, DFL, add, div, ft, ftIn, inch, mm, psf, pitch } from "fettled";
 import { fink } from "fettled/framing";
 import { row } from "fettled/runs";
-import { perimeter, type Opening } from "fettled/walls";
+import { perimeter, type Opening, framing } from "fettled/walls";
 
 const width = ft(24), depth = ft(22), height = ftIn(8, 1.125);
 const twoByFour = lumber(nominal["2x4"], DFL.No2);
@@ -22,7 +22,7 @@ const window_: Opening = { label: "W1", kind: "window", centre: div(width, 2), w
 
 export default part("garage", () => {
   // (Its walls' outside corners, anticlockwise from the front's west end.)
-  const leg = { height, spacing: inch(16), stock: twoByFour };
+  const leg = { height, build: [framing(twoByFour, { spacing: inch(16) })] };
   const w = perimeter("walls", {
     corners: [node(0, 0, 0), node(width, 0, 0), node(width, depth, 0), node(0, depth, 0)],
     legs: [{ ...leg, openings: [garageDoor] }, { ...leg, openings: [manDoor] }, { ...leg, openings: [window_] }, leg],

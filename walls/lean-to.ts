@@ -11,7 +11,7 @@
 
 import { part, node, hinted, lumber, nominal, DFL, mm, inch } from "fettled";
 import { slab } from "fettled/framing";
-import { wall, perimeter, tee } from "fettled/walls";
+import { wall, perimeter, tee, framing } from "fettled/walls";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
 const header = lumber(nominal["2x8"], DFL.No2, { plies: 2 });
@@ -23,7 +23,7 @@ const along = mm(2400), back = 3000 - 139.7;
 export default part("lean-to", () => {
   // (The slab runs on past the back, under the wing.)
   const floor = slab("slab", { outline: [[0, 0], [wide, 0], [wide, mm(4400)], [0, mm(4400)]], top: [node(0, 0, 0), node(mm(1000), 0, 0), node(0, mm(1000), mm(10))], thickness: inch(4) });
-  const leg = { stock: twoBySix, base: floor.top, spacing: inch(16) };
+  const leg = { base: floor.top, build: [framing(twoBySix, { spacing: inch(16) })] };
   const walls = perimeter("walls", {
     corners,
     names: ["front", "right", "back", "left"],
@@ -37,8 +37,8 @@ export default part("lean-to", () => {
   // (A partition inside, from the back's inside face toward the front, and a wing outside it: each's line its +z face,
   // half its depth from its middle, 1600 from the west end.)
   const x = 4000 - 2400;
-  const partition = wall("partition", { from: node(mm(x - 44.5), mm(back), 0), to: node(mm(x - 44.5), mm(1500), 0), stock: twoByFour, base: floor.top, level: mm(2400), spacing: inch(16) });
-  const wing = wall("wing", { from: node(mm(x + 44.5), mm(3000), 0), to: node(mm(x + 44.5), mm(4200), 0), stock: twoByFour, base: floor.top, level: mm(2400), spacing: inch(16) });
+  const partition = wall("partition", { from: node(mm(x - 44.5), mm(back), 0), to: node(mm(x - 44.5), mm(1500), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
+  const wing = wall("wing", { from: node(mm(x + 44.5), mm(3000), 0), to: node(mm(x + 44.5), mm(4200), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
   const tees = [tee(walls.legs[2], partition, along), tee(walls.legs[2], wing, along, { side: "outside", lap: false })];
   return { slab: floor, walls, partition, wing, tees };
 });

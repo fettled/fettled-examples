@@ -12,7 +12,7 @@
 // to it, and the back wall's starts from it, its far end staying as drawn, so its top slopes a little.
 
 import { part, node, free, plane, support, read, is, lumber, nominal, DFL, add, sub, inch, ft, mm } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const [lo, hi, step] = [ft(8), ft(10), inch(4)];
@@ -20,7 +20,7 @@ const [lo, hi, step] = [ft(8), ft(10), inch(4)];
 export default part("walls that slope", () => {
   // (The back right corner's top: drawn at 10', found.)
   const corner = free(hi);
-  const legs = { spacing: inch(16), stock: stud };
+  const legs = { build: [framing(stud, { spacing: inch(16) })] };
   const walls = perimeter("lean-to", {
     corners: [node(0, 0, 0), node(ft(12), 0, 0), node(ft(12), ft(10), 0), node(0, ft(10), 0)],
     names: ["front", "right", "back", "left"],

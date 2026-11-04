@@ -12,18 +12,18 @@
 
 import { part, node, free, plane, support, areaLoad, cases, must, on, placed, joints, lumber, nominal, DFL, add, sub, div, inch, ft, mm, psf, type Length, type Node } from "fettled";
 import { floor } from "fettled/framing";
-import { perimeter, wall, tee, type Opening } from "fettled/walls";
+import { perimeter, wall, tee, type Opening, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const joist = lumber(nominal["2x10"], DFL.No2);
 const [long, deep, height] = [ft(24), ft(16), ft(8)];
 // (Half a wall, from its middle to its faces; a wall, from its outside to its inside.)
 const out = div(stud.depth, 2), inside = stud.depth;
-const leg = { height, spacing: inch(16), stock: stud };
+const leg = { height, build: [framing(stud, { spacing: inch(16) })] };
 // (A partition from one place of its line to another: its line is its +z face, half a wall to its right, looking along
 // it, from its middle. Each laid out from the line of the wall it starts at, as the original's: the walls' outsides for
 // the middle wall and the stub, the middle wall's middle for the second.)
-const partition = (name: string, from: Node, to: Node, layoutFrom: Length, openings: Opening[] = []) => wall(name, { ...leg, from, to, setOuts: [sub(mm(0), layoutFrom)], openings });
+const partition = (name: string, from: Node, to: Node, layoutFrom: Length, openings: Opening[] = []) => wall(name, { height, from, to, build: [framing(stud, { spacing: inch(16), setOuts: [sub(mm(0), layoutFrom)] })], openings });
 // (The door, 5' along the second from the middle wall's middle.)
 const door: Opening = { label: "Door", kind: "door", centre: sub(ft(5), out), width: inch(32), head: inch(82), header: lumber(nominal["2x8"], DFL.No2, { plies: 2 }), jacks: 1 };
 const backs = (...at: Length[]) => at.map((a) => ({ at: a, width: stud.depth }));
@@ -37,7 +37,7 @@ export default part("an interior wall", () => {
   });
   // The middle wall north from the front's inside to the back's, its +z east; the second east from its east face to
   // the right wall's inside, its +z south; the stub east from the left wall's inside, its +z south, ending free.
-  const middle = wall("middle", { ...leg, from: node(add(ft(12), out), inside, 0), to: node(add(ft(12), out), sub(deep, inside), 0), setOuts: [sub(mm(0), inside)], backs: backs(sub(ft(9), inside)) });
+  const middle = wall("middle", { height, from: node(add(ft(12), out), inside, 0), to: node(add(ft(12), out), sub(deep, inside), 0), build: [framing(stud, { spacing: inch(16), setOuts: [sub(mm(0), inside)] })], backs: backs(sub(ft(9), inside)) });
   const cross = partition("cross", node(add(ft(12), out), sub(ft(9), out), 0), node(sub(long, inside), sub(ft(9), out), 0), out, [door]);
   const stub = partition("stub", node(inside, sub(ft(8), out), 0), node(ft(5), sub(ft(8), out), 0), inside);
   const tees = {

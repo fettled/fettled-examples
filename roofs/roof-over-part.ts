@@ -9,7 +9,7 @@
 
 import { part, node, plane, support, frame, neg, lumber, nominal, DFL, add, div, inch, ft, mm, as, type Length } from "fettled";
 import { fink } from "fettled/framing";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { truss } from "fettled/trusses";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
@@ -32,7 +32,7 @@ function fan(name: string, length: Length, at: ReturnType<typeof frame>) {
 }
 
 export default part("a roof over part", () => {
-  const w = perimeter("walls", { corners: [node(0, 0, 0), node(long, 0, 0), node(long, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud } });
+  const w = perimeter("walls", { corners: [node(0, 0, 0), node(long, 0, 0), node(long, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   // Nine trusses from 4' along the front for 16', each across the depth, its heels at the walls' outsides, its pieces
   // centred on its line; the 4th to the 6th fans.
   const roof = part("roof", (r) => {

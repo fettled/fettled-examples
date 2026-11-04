@@ -12,7 +12,7 @@
 import { part, node, free, plane, support, areaLoad, cases, must, on, offset, placed, joints, frame, add, sub, div, fit, lumber, nominal, DFL, inch, ft, mm, psf, layers, weights, type Length } from "fettled";
 import { floor, fink } from "fettled/framing";
 import { row } from "fettled/runs";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { sheets } from "fettled/products";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
@@ -23,7 +23,7 @@ const covering = layers(weights.standingSeam24ga, weights.polystickMts, sheets.p
 const deck = decking.layers!.reduce((t: Length, l) => add(t, l.thickness), mm(0));
 // (A storey of walls on their outsides' corners, where it stands.)
 const storey = (name: string, at?: ReturnType<typeof placed>) =>
-  perimeter(name, { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud }, at });
+  perimeter(name, { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] }, at });
 
 export default part("what a floor and a roof are made of", (s) => {
   const ground = storey("ground");

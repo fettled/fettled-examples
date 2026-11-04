@@ -18,18 +18,20 @@
 
 import { part, node, sub, lumber, nominal, DFL, mm, inch, ft } from "fettled";
 import { slab } from "fettled/framing";
-import { wall, perimeter, tee, panels } from "fettled/walls";
+import { wall, perimeter, tee, panels, framing } from "fettled/walls";
 import { sheets } from "fettled/products";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
 const header = lumber(nominal["2x10"], DFL.No2, { plies: 2 });
 const [wide, deep, height] = [ft(16), ft(10), ft(8)];
 const corners = [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)];
-const outside = [panels(sheets.osb7_16)], inside = [panels(sheets.gwb1_2, { laid: "horizontal" })];
+// (Each leg's build-up from outside in: OSB, its framing, gypsum board; the partition's gypsum board both sides.)
+const osb = panels(sheets.osb7_16), gwb = panels(sheets.gwb1_2, { laid: "horizontal" });
+const built = (stock: typeof twoBySix, spacing: ReturnType<typeof inch>) => [osb, framing(stock, { spacing }), gwb];
 const legs = {
-  front: { stock: twoBySix, height, spacing: inch(16), outside, inside, backs: [{ at: mm(3000), width: twoByFour.depth }], openings: [{ label: "D1", kind: "door" as const, centre: mm(1500), width: mm(1000), header, flush: true }] },
-  side: { stock: twoByFour, height, spacing: inch(16), outside, inside },
-  back: { stock: twoBySix, height, spacing: inch(24), outside, inside, backs: [{ at: mm(4876.8 - 3000), width: twoByFour.depth }], openings: [{ label: "W1", kind: "window" as const, centre: mm(1000), width: mm(1200), head: mm(2100), height: mm(1000), header }] },
+  front: { height, build: built(twoBySix, inch(16)), backs: [{ at: mm(3000), width: twoByFour.depth }], openings: [{ label: "D1", kind: "door" as const, centre: mm(1500), width: mm(1000), header, flush: true }] },
+  side: { height, build: built(twoByFour, inch(16)) },
+  back: { height, build: built(twoBySix, inch(24)), backs: [{ at: mm(4876.8 - 3000), width: twoByFour.depth }], openings: [{ label: "W1", kind: "window" as const, centre: mm(1000), width: mm(1200), head: mm(2100), height: mm(1000), header }] },
 };
 
 export default part("sheathed and drywalled", () => {
@@ -37,7 +39,7 @@ export default part("sheathed and drywalled", () => {
   // (At each corner, the side's sheathing runs past over the front's or the back's edge: so the front's and the back's,
   // 16' long, are four whole sheets each, not four and a sliver.)
   const walls = perimeter("walls", { corners, legs: [legs.front, legs.side, legs.back, legs.side], names: ["front", "right", "back", "left"], layers: [undefined, "b", undefined, "b"] });
-  const partition = wall("partition", { from: node(mm(3044.45), twoBySix.depth, 0), to: node(mm(3044.45), sub(deep, twoBySix.depth), 0), stock: twoByFour, height, spacing: inch(16), outside: inside, inside });
+  const partition = wall("partition", { from: node(mm(3044.45), twoBySix.depth, 0), to: node(mm(3044.45), sub(deep, twoBySix.depth), 0), height, build: [gwb, framing(twoByFour, { spacing: inch(16) }), gwb] });
   const tees = [tee(walls.legs[0], partition, mm(3000)), tee(walls.legs[2], partition, mm(4876.8 - 3000), { end: "end" })];
   return { slab: floor, walls, partition, tees };
 });

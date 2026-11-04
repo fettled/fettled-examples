@@ -11,7 +11,7 @@
 
 import { part, node, free, plane, support, areaLoad, cases, must, on, offset, placed, joints, fit, add, box, lumber, nominal, DFL, inch, ft, mm, psf } from "fettled";
 import { openWebFloor } from "fettled/trusses";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x6"], DFL.No2);
 const twoByFour = lumber(nominal["2x4"], DFL.No2);
@@ -20,7 +20,7 @@ const flat = box("2x4 flat", { thickness: twoByFour.depth, depth: twoByFour.thic
 const rim = box("1¼ rim board", { thickness: inch(1.25), depth: inch(18), material: DFL.No2 });
 const [wide, deep, height, depth, deck] = [ft(16), ft(24), ft(8), inch(18), inch(0.75)];
 const storey = (name: string, at?: ReturnType<typeof placed>) =>
-  perimeter(name, { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud }, at });
+  perimeter(name, { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] }, at });
 
 export default part("an open-web floor", (s) => {
   const ground = storey("ground");

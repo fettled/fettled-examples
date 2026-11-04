@@ -14,7 +14,7 @@
 // the set sits on the sheathing; here it sits on the chords.) Snow 25 psf on plan.
 
 import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, psf, type Length } from "fettled";
-import { perimeter, tee } from "fettled/walls";
+import { perimeter, tee, framing } from "fettled/walls";
 import { roofSurface, trussRow, fink } from "fettled/framing";
 import { row } from "fettled/runs";
 import { sheets } from "fettled/products";
@@ -33,7 +33,7 @@ const at = (x: number, y: number, z = 0) => node(inch(x), inch(y), z === 0 ? 0 :
 // undersides at `z`: its frame there, x along the row, y across it, so z is up.)
 const rowFrame = (a: [number, number], along: [number, number], z: number) =>
   frame(at(a[0], a[1], z), { x: at(a[0] + along[0], a[1] + along[1], z), y: at(a[0] - along[1], a[1] + along[0], z) });
-const legs = { height: inch(plate), spacing: inch(16), stock: chord };
+const legs = { height: inch(plate), build: [framing(chord, { spacing: inch(16) })] };
 
 export default part("a roof that turns a corner", () => {
   // The bar's walls, and the wing's three, out from the bar's front and back to it, teed onto its outside.

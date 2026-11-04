@@ -13,7 +13,7 @@
 
 import { part, node, plane, neg, frame, placed, place, box, span, letIn, bolted, support, load, cases, SPF, mm, N, type Length, type PartBase, type Piece } from "fettled";
 import { bracket } from "../sheet/bracket";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 // (Metric 2x4 and 1x4, 38 by 89 and 19 by 89.)
 const twoByFour = box("2x4", { thickness: mm(38), depth: mm(89), material: SPF.No1No2 });
@@ -51,13 +51,13 @@ function bracketOn(stud: Piece, height: Length) {
 // The corners of the walls' outsides and their heights there, as they were set out.
 const outline = mm.each([[0, -44.5], [3044.5, -44.5], [3044.5, 2400]] as [number, number][]);
 const heights = mm.each([2440, 2440, 2740]);
-const leg = { spacing: mm(406), stock: twoByFour };
+const studs = (o: { onStuds?: Parameters<typeof framing>[1]["onStuds"] } = {}) => [framing(twoByFour, { spacing: mm(406), ...o })];
 const w = perimeter("walls", {
   corners: outline.map(([x, y]) => node(x, y, 0)),
   closed: false,
   legs: [
-    { ...leg, height: heights[0], onStuds: (l, studs) => ({ brace: brace(l, studs, [mm(300), mm(150)], [mm(2500), mm(2200)]), ...bracketOn(studs[2], mm(1200)) }) },
-    { ...leg, height: [heights[1], heights[2]] },
+    { height: heights[0], build: studs({ onStuds: (l, made) => ({ brace: brace(l, made, [mm(300), mm(150)], [mm(2500), mm(2200)]), ...bracketOn(made[2], mm(1200)) }) }) },
+    { height: [heights[1], heights[2]], build: studs() },
   ],
 });
 

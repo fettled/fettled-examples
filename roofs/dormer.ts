@@ -8,7 +8,7 @@
 // drawn.)
 
 import { part, node, plane, support, layers, weights, lumber, nominal, DFL, inch, ft, mm, type Length } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { roofSurface } from "fettled/framing";
 import { sheets } from "fettled/products";
 
@@ -19,7 +19,7 @@ const eave = (pitch: number, height: Length, overhang: Length) => ({ pitch, heig
 const rect = (x0: number, y0: number, x1: number, y1: number): [Length, Length][] => [[ft(x0), ft(y0)], [ft(x1), ft(y0)], [ft(x1), ft(y1)], [ft(x0), ft(y1)]];
 
 export default part("a dormer", () => {
-  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(ft(wide), 0, 0), node(ft(wide), ft(deep), 0), node(0, ft(deep), 0)], legs: { height: ft(8), spacing: inch(16), stock: stud } });
+  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(ft(wide), 0, 0), node(ft(wide), ft(deep), 0), node(0, ft(deep), 0)], legs: { height: ft(8), build: [framing(stud, { spacing: inch(16) })] } });
   const roof = roofSurface("roof", {
     parts: [
       // The main roof: its eaves along the front and the back, on the walls; gables at the ends.

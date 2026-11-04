@@ -16,7 +16,7 @@
 
 import { part, node, plane, support, areaLoad, cases, roles, layers, weights, frame, neg, lumber, nominal, DFL, add, div, inch, ft, mm, as, psf, type Length, type Length0 } from "fettled";
 import { row } from "fettled/runs";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { truss } from "fettled/trusses";
 import { sheets } from "fettled/products";
 
@@ -34,7 +34,7 @@ const fold = (as(bottom.depth, mm) - as(chord.depth, mm) * Math.hypot(1, k)) / k
 const strip = (y0: number, y1: number): [Length0, Length0][] => [[mm(-1000), mm(y0)], [add(length, mm(1000)), mm(y0)], [add(length, mm(1000)), mm(y1)], [mm(-1000), mm(y1)]];
 
 export default part("a flat roof on trusses of your own", () => {
-  const w = perimeter("walls", { corners: [node(0, 0, 0), node(length, 0, 0), node(length, span, 0), node(0, span, 0)], legs: { height, spacing: inch(16), stock: stud } });
+  const w = perimeter("walls", { corners: [node(0, 0, 0), node(length, 0, 0), node(length, span, 0), node(0, span, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   // Each truss across the 20', its front heel at the front wall's outside, its bottom chord's underside on the plates;
   // its pieces centred on its line, every 24" along the 12'.
   const roof = part("roof", (r) => {

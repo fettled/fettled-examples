@@ -9,7 +9,7 @@
 
 import { part, node, free, read, fallback, on, placed, lumber, nominal, DFL, mm, inch, ft } from "fettled";
 import { slab } from "fettled/framing";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const [wide, deep, height] = [ft(12), ft(8), ft(8)];
@@ -21,7 +21,7 @@ export default part("a slab read from a scan", () => {
   // (The slab: 4" of concrete to the walls' outsides, its top through these, the ground under it.)
   const floor = slab("slab", { outline: [[0, 0], [wide, 0], [wide, deep], [0, deep]], top: [node(0, 0, top), node(mm(1000), 0, top), node(0, mm(1000), top)], thickness: inch(4) });
   const slabTop = floor.top;
-  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, base: top, spacing: inch(16), stock: stud } });
+  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, base: top, build: [framing(stud, { spacing: inch(16) })] } });
   // The scan, where it was registered: and where it saw the floor, in its own coordinates.
   const seen = mm.each([[500, 400, -411], [1800, 200, -412], [1100, 1300, -413]]).map(([x, y, z]) => node(x, y, z));
   const scan = part("scan", { seen }, { at: placed({ origin: [mm(1000), mm(500), mm(400)], x: [Math.cos(turn), Math.sin(turn), 0], y: [-Math.sin(turn), Math.cos(turn), 0] }) });

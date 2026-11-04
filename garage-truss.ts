@@ -11,7 +11,7 @@
 // on the walls' plates. Roof dead load 20 psf, snow 25 psf, on plan.
 
 import { part, node, free, plane, line, support, areaLoad, must, read, on, distance, frame, sheet, plan, iso, elevation, utilization, schedule, standardSheets, cases, lumber, nominal, DFL, add, sub, max, inch, ft, mm, psf, ratio, type Length, type Num } from "fettled";
-import { wall } from "fettled/walls";
+import { wall, framing } from "fettled/walls";
 import { garageTruss } from "./garage-truss-shape";
 
 const twoByFour = lumber(nominal["2x4"], DFL.No2);
@@ -20,7 +20,7 @@ const height = ft(8);
 const run = ft(6);
 
 /** A bearing wall along y, `run` long, its east face at `x` (free: a guess): a leg from y = 0 north, its +z east. */
-const bearing = (name: string, x: Num<"length">) => wall(name, { from: node(x, 0, 0), to: node(x, run, 0), height, spacing: inch(16), stock: twoBySix });
+const bearing = (name: string, x: Num<"length">) => wall(name, { from: node(x, 0, 0), to: node(x, run, 0), height, build: [framing(twoBySix, { spacing: inch(16) })] });
 
 export default part("existing garage truss", (g) => {
   // The unknowns: guesses only.

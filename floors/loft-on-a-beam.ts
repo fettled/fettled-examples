@@ -10,7 +10,7 @@
 
 import { part, node, free, plane, span, support, areaLoad, cases, roles, must, on, placed, joints, lumber, nominal, DFL, add, sub, div, inch, ft, mm, psf } from "fettled";
 import { floor } from "fettled/framing";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const joist = lumber(nominal["2x8"], DFL.No2);
@@ -21,7 +21,7 @@ const [wide, deep, half, height] = [ft(12), ft(16), ft(8), ft(8)];
 const [x0, x1, under] = [inch(3.5 + 1.75), sub(wide, inch(3.5 + 1.75)), sub(height, girder.depth)];
 
 export default part("a loft on a beam", (s) => {
-  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud } });
+  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   // The beam on its posts: each post from the slab to the beam's underside; each laid from its line along its y (a
   // post's the walls' x, the beam's their y), so its line is half a 4x back from its middle.
   const beam = part("beam", (b) => {

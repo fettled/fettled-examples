@@ -11,7 +11,7 @@
 // of the front wall's top plate 1.5 m along it (between two trusses' tails).
 
 import { part, node, free, plane, support, placed, joints, frame, span, must, hinted, parallel, coincide, lumber, nominal, DFL, add, div, sub, inch, ft, m, mm } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { fink, trussRow } from "fettled/framing";
 import { row } from "fettled/runs";
 
@@ -20,7 +20,7 @@ const [wide, deep, height] = [ft(16), ft(12), ft(8)];
 
 export default part("placed by a corner", (s) => {
   const building = part("building", () => {
-    const walls = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud } });
+    const walls = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
     // (Its trusses along the 16', spanning the 12' from the front wall's outside, their axes half a depth over the
     // plates.)
     const z = add(height, div(stud.depth, 2));

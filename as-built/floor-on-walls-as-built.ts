@@ -15,7 +15,7 @@
 
 import { part, bears, node, free, plane, support, placed, facing, neg, must, on, areaLoad, cases, designBasis, lumber, nominal, DFL, add, inch, ft, mm, psf, type Length, type PartBase } from "fettled";
 import { floor } from "fettled/framing";
-import { wall } from "fettled/walls";
+import { wall, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2), joist = lumber(nominal["2x10"], DFL.No2);
 const [width, depth, height] = [ft(12), ft(10), ft(8)];
@@ -23,7 +23,7 @@ const [width, depth, height] = [ft(12), ft(10), ft(8)];
 export default part("a floor on walls as built", () => {
   // The walls, each outside out: the front, level; the back, surveyed 5 mm higher where it starts (its east end) than
   // where it ends.
-  const leg = { spacing: inch(16), stock: stud };
+  const leg = { build: [framing(stud, { spacing: inch(16) })] };
   const front = wall("Front", { ...leg, from: node(0, 0, 0), to: node(width, 0, 0), height });
   const back = wall("Back", { ...leg, from: node(width, depth, 0), to: node(0, depth, 0), height: [add(height, mm(5)), height] });
   // The floor, its pieces loose, drawn on the walls' tops where they would be level: each end of each found where it

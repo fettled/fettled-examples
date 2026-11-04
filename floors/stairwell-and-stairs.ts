@@ -14,7 +14,7 @@
 // a side, beyond its stringers. Floor loads 10 psf dead, 40 psf live.
 
 import { part, node, free, plane, support, placed, joints, frame, fit, areaLoad, cases, must, on, lumber, box, nominal, DFL, add, inch, ft, mm, psf } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { floor, stairs } from "fettled/framing";
 
 const stud = lumber(nominal["2x4"], DFL.No2), joist = lumber(nominal["2x12"], DFL.No2), stringer = lumber(nominal["2x12"], DFL.No2);
@@ -25,7 +25,7 @@ const [flight, clear] = [36, 2.5];
 const opening = { across: 12, along: 48, width: flight + 2 * (1.5 + clear), length: 120 };
 
 export default part("a stairwell and stairs", (s) => {
-  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud } });
+  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   // The floor: its joists along y, across x; its underside on the walls' plates (found, sliding up to them).
   const rise = free(mm(0));
   const corner = node(0, 0, rise);

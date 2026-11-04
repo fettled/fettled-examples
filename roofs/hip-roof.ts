@@ -13,7 +13,7 @@
 // have no tails), so that is left out here.)
 
 import { part, node, plane, support, areaLoad, cases, lumber, nominal, DFL, sub, div, inch, ft, mm, psf } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { roof, type Plan } from "fettled/roofs";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
@@ -25,7 +25,7 @@ const out = div(stud.depth, 2);
 const outline: Plan[] = [[out, out], [sub(wide, out), out], [sub(wide, out), sub(deep, out)], [out, sub(deep, out)]];
 
 export default part("a hip roof", () => {
-  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, spacing: inch(16), stock: stud } });
+  const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   const r = roof("roof", { outline, plate: height, pitch: 0.5, outside: out, spacing: inch(24), from: inch(12), stock: rafter, ties: tie });
   const ground = [node(0, 0, 0), node(mm(1), 0, 0), node(0, mm(1), 0)];
   return {

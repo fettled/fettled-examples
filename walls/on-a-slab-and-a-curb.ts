@@ -15,7 +15,7 @@
 
 import { part, node, free, polygon, must, read, fallback, on, equal, add, sub, placed, joints, extrusion, lumber, nominal, DFL, materials, mm, inch, ft, type Length } from "fettled";
 import { slab } from "fettled/framing";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const [wide, deep, height] = [ft(12), ft(8), ft(8)];
@@ -43,7 +43,7 @@ export default part("walls on a slab and a curb", () => {
   // curb's.
   const onCurb = add(top, curbed);
   const level = add(onCurb, height);
-  const leg = { level, spacing: inch(16), stock: stud, base: onCurb };
+  const leg = { level, base: onCurb, build: [framing(stud, { spacing: inch(16) })] };
   const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: [leg, { ...leg, base: top }, leg, leg] });
   // (A level put on the slab, in the middle of the room: 45 mm below nothing.)
   const survey = node(ft(6), ft(4), mm(-45));

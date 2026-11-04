@@ -17,7 +17,7 @@ import { part, bears, node, free, plane, support, frame, areaLoad, cases, design
 import { fink, headerOnPosts, trussRow, covering } from "fettled/framing";
 import { row } from "fettled/runs";
 import { truss } from "fettled/trusses";
-import { wall } from "fettled/walls";
+import { wall, framing } from "fettled/walls";
 import { sheets } from "fettled/products";
 
 const width = ft(12), depth = ft(16), wallHeight = mm(2439);
@@ -29,7 +29,7 @@ const k = pitch(5);
 
 export default part("trusses on a header", (self) => {
   // (Its outside face on y = depth, walked east to west so its outside is north.)
-  const back = wall("back wall", { from: node(width, depth, 0), to: node(0, depth, 0), height: wallHeight, spacing: inch(16), stock: twoBySix });
+  const back = wall("back wall", { from: node(width, depth, 0), to: node(0, depth, 0), height: wallHeight, build: [framing(twoBySix, { spacing: inch(16) })] });
   // The header across the front: its frame's x along it, y up, z across (out of the front).
   const ends = [node(0, 0, 0), node(width, 0, 0), node(0, 0, mm(1000))];
   const front = headerOnPosts("front header", { length: width, top: sub(wallHeight, mm(10)), beam, post, at: frame(ends[0], { x: ends[1], y: ends[2] }) });

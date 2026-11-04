@@ -9,7 +9,7 @@
 // each common: it is what no wall does, its plies sharing it. All at 6 in 12, of 2x4s; snow 25 psf on plan.
 
 import { part, node, plane, frame, support, areaLoad, hanger, cut, cases, lumber, nominal, DFL, inch, ft, mm, psf, sub, add, type Length, type PartBase } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { trussRow } from "fettled/framing";
 import { howe, kingPost, plied } from "fettled/trusses";
 
@@ -22,7 +22,7 @@ const stations: Length[] = [1, 2, 3, 4, 5, 6, 7].map((k) => ft(2 * k));
 
 export default part("girder and hung commons", () => {
   const at = (x: Length | 0, y: Length | 0, z: Length | 0 = 0) => node(x, y, z);
-  const walls = perimeter("walls", { corners: [at(0, 0), at(width, 0), at(width, depth), at(0, depth)], legs: { height, spacing: inch(16), stock: stud } });
+  const walls = perimeter("walls", { corners: [at(0, 0), at(width, 0), at(width, depth), at(0, depth)], legs: { height, build: [framing(stud, { spacing: inch(16) })] } });
   // The girder: its first ply in the plane across the building at y0, its pieces laid from it toward the back, the
   // second on it; their heels at the side walls' outsides, their bottom chords' undersides on their plates.
   const girder = plied("girder", {

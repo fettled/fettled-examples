@@ -10,7 +10,7 @@
 
 import { part, node, lumber, nominal, DFL, mm, inch } from "fettled";
 import { slab } from "fettled/framing";
-import { perimeter, type Opening } from "fettled/walls";
+import { perimeter, type Opening, framing } from "fettled/walls";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2);
 const header = lumber(nominal["2x10"], DFL.No2, { plies: 2 });
@@ -20,11 +20,11 @@ const window_: Opening = { label: "W1", kind: "window", centre: mm(2000), width:
 
 export default part("an L", () => {
   const floor = slab("slab", { outline: corners, top: [node(0, 0, 0), node(mm(1000), 0, 0), node(0, mm(1000), 0)], thickness: inch(4) });
-  const leg = { stock: twoBySix, height: mm(2400), base: mm(40), curb: { height: mm(40) }, spacing: inch(16) };
+  const leg = { height: mm(2400), base: mm(40), curb: { height: mm(40) }, build: [framing(twoBySix, { spacing: inch(16) })] };
   const walls = perimeter("walls", {
     corners: corners.map(([x, y]) => node(x, y, 0)),
     names: ["west", "north", "inner east", "inner north", "east", "south"],
-    legs: [{ ...leg, openings: [door] }, { ...leg, openings: [window_], clear: [{ from: mm(3000), to: mm(3100) }] }, leg, leg, leg, leg],
+    legs: [{ ...leg, openings: [door] }, { ...leg, openings: [window_], build: [framing(twoBySix, { spacing: inch(16), clear: [{ from: mm(3000), to: mm(3100) }] })] }, leg, leg, leg, leg],
   });
   return { slab: floor, walls };
 });

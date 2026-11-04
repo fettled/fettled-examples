@@ -9,7 +9,7 @@
 // tops in those planes, 2' overhangs. Dead load 12 psf and snow 25 psf on plan.
 
 import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, as, psf, type Length } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { roofSurface, trussRow } from "fettled/framing";
 import { row } from "fettled/runs";
 import { raisedHeel } from "fettled/trusses";
@@ -24,7 +24,7 @@ const back = ridge - (wide * 12 - ridgeAt) * pitch - height;
 const eave = (h: number) => ({ pitch, height: [inch(height + h), inch(height + h)] as [Length, Length], overhang: ft(2) });
 
 export default part("raised-heel trusses", () => {
-  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(ft(wide), 0, 0), node(ft(wide), ft(deep), 0), node(0, ft(deep), 0)], legs: { height: inch(height), spacing: inch(16), stock: stud } });
+  const walls = perimeter("walls", { corners: [node(0, 0, 0), node(ft(wide), 0, 0), node(ft(wide), ft(deep), 0), node(0, ft(deep), 0)], legs: { height: inch(height), build: [framing(stud, { spacing: inch(16) })] } });
   // The roof over the 24' (x), its eaves along the front (x = 0) and the back (x = 24'), gables at the ends.
   const roof = roofSurface("roof", {
     parts: [{ outline: [[0, 0], [ft(wide), 0], [ft(wide), ft(deep)], [0, ft(deep)]], edges: [null, eave(back), null, eave(front)], rake: ft(1) }],

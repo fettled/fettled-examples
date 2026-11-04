@@ -10,13 +10,13 @@
 
 import { part, node, add, mul, lumber, nominal, DFL, mm, inch, ft, type Length, type Node } from "fettled";
 import { slab } from "fettled/framing";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const [wide, deep, step, drop, height] = [ft(12), ft(16), ft(10), mm(50), ft(8)];
 // (A run of walls on corners of their outsides, open at its ends: on `base`, `tall` above it.)
 const run = (name: string, corners: [Length | 0, Length | 0][], base: Length | 0, tall: Length) =>
-  perimeter(name, { corners: corners.map(([x, y]) => node(x, y, 0)), closed: false, legs: { height: tall, base, spacing: inch(16), stock: stud } });
+  perimeter(name, { corners: corners.map(([x, y]) => node(x, y, 0)), closed: false, legs: { height: tall, base, build: [framing(stud, { spacing: inch(16) })] } });
 
 export default part("a floor at two heights", () => {
   const lower = run("lower", [[0, step], [0, 0], [wide, 0], [wide, step]], mul(-1, drop), add(height, drop));

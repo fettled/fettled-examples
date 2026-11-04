@@ -12,7 +12,7 @@
 // wall's plate's inner top edge, where it is as high.) Snow 25 psf on plan.
 
 import { part, node, plane, support, bears, frame, areaLoad, cases, lumber, nominal, DFL, inch, ft, mm, psf, add, sub, mul, div, type Feature, type Frame, type Length, type PartBase } from "fettled";
-import { perimeter } from "fettled/walls";
+import { perimeter, framing } from "fettled/walls";
 import { fink, trussRow } from "fettled/framing";
 import { row } from "fettled/runs";
 import { fan, kingPost, howe, pratt, scissors, mono, raisedHeel } from "fettled/trusses";
@@ -43,7 +43,7 @@ export default part("standard truss types", () => {
     // (Where its bottom chord rises: its side walls' tops rising with it, under the end trusses; its back wall as high
     // as the chord is over that wall's plate's inner edge.)
     const [far, back] = rise ? [add(height, mul(rise, ft(span))), add(height, mul(rise, sub(ft(span), stud.depth)))] : [height, height];
-    const leg = { spacing: inch(16), stock: stud };
+    const leg = { build: [framing(stud, { spacing: inch(16) })] };
     const legs = [{ ...leg, height }, { ...leg, height: [height, far] as [Length, Length] }, { ...leg, height: back }, { ...leg, height: [far, height] as [Length, Length] }];
     const walls = perimeter(`${name} walls`, { corners: [at(0, 0), at(bay, 0), at(bay, ft(span)), at(0, ft(span))], legs });
     // (Its trusses along the bay, spanning y from the front wall's outside; their bottom chords' undersides on the

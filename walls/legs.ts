@@ -10,16 +10,16 @@
 
 import { part, node, sub, lumber, nominal, DFL, mm, inch, ft } from "fettled";
 import { slab } from "fettled/framing";
-import { wall, perimeter, tee } from "fettled/walls";
+import { wall, perimeter, tee, framing } from "fettled/walls";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
 const header = lumber(nominal["2x10"], DFL.No2, { plies: 2 });
 const [wide, deep, height] = [ft(16), ft(10), ft(8)];
 const corners = [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)];
 const legs = {
-  front: { stock: twoBySix, height, spacing: inch(16), backs: [{ at: mm(3000), width: twoByFour.depth }], openings: [{ label: "D1", kind: "door" as const, centre: mm(1500), width: mm(1000), header, flush: true }] },
-  side: { stock: twoByFour, height, spacing: inch(16) },
-  back: { stock: twoBySix, height, spacing: inch(24), backs: [{ at: mm(4876.8 - 3000), width: twoByFour.depth }], openings: [{ label: "W1", kind: "window" as const, centre: mm(1000), width: mm(1200), head: mm(2100), height: mm(1000), header }] },
+  front: { height, backs: [{ at: mm(3000), width: twoByFour.depth }], openings: [{ label: "D1", kind: "door" as const, centre: mm(1500), width: mm(1000), header, flush: true }], build: [framing(twoBySix, { spacing: inch(16) })] },
+  side: { height, build: [framing(twoByFour, { spacing: inch(16) })] },
+  back: { height, backs: [{ at: mm(4876.8 - 3000), width: twoByFour.depth }], openings: [{ label: "W1", kind: "window" as const, centre: mm(1000), width: mm(1200), head: mm(2100), height: mm(1000), header }], build: [framing(twoBySix, { spacing: inch(24) })] },
 };
 
 export default part("legs", () => {
@@ -27,7 +27,7 @@ export default part("legs", () => {
   const walls = perimeter("walls", { corners, legs: [legs.front, legs.side, legs.back, legs.side], names: ["front", "right", "back", "left"] });
   // (The partition: from the front's inside face, 3 m along it, to the back's.)
   // (Its line is its +z face, so half its depth east of its middle.)
-  const partition = wall("partition", { from: node(mm(3044.5), twoBySix.depth, 0), to: node(mm(3044.5), sub(deep, twoBySix.depth), 0), stock: twoByFour, height, spacing: inch(16) });
+  const partition = wall("partition", { from: node(mm(3044.5), twoBySix.depth, 0), to: node(mm(3044.5), sub(deep, twoBySix.depth), 0), height, build: [framing(twoByFour, { spacing: inch(16) })] });
   const tees = [tee(walls.legs[0], partition, mm(3000)), tee(walls.legs[2], partition, mm(4876.8 - 3000), { end: "end" })];
   return { slab: floor, walls, partition, tees };
 });
