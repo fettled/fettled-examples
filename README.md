@@ -22,6 +22,7 @@ its parts.
 | [sheet/](sheet) | A folded bracket (a library the corner of walls includes), a sheet bracket on a T-slot rail, welded seams |
 | [volumes/](volumes) | Extrusions ended on faces, a revolve, a sweep, a loft, a carve, a clearance |
 | [mechanisms/](mechanisms) | A four-bar linkage, a lid and a drawer, each opened until it meets something |
+| [cabinets/](cabinets) | Frameless kitchen cabinets (`fettled/cabinets`): slab, shaker and glass fronts, doors and drawers through their ranges, a run under a counter |
 | [products/](products) | The building products of the tables (`fettled/products`): bricks and blocks, sheet goods, tiles, sidings and trims |
 
 There are also whole things, each a file (with its sidecars, where it has them):
