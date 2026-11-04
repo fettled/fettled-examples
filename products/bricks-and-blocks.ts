@@ -4,7 +4,7 @@
 // Each is its specified size (a US modular brick 3⅝ x 2¼ x 7⅝", three cores of 1½"; a UK one 215 x 102.5 x 65 mm), of
 // its material, drawn its colour. Its box weighs what one does: as its datasheet says (a block's row), else as its
 // body less its cores would. Drawn cored, it weighs as its body: beside the box, a check on the datasheet (an 8x8x16
-// block drawn with its cells weighs 12.6 kg, its datasheet 16.3: its cells are drawn at their least webs and shells,
+// block drawn with its cells weighs 12.6 kg, its source 15.4: its cells are drawn at their least webs and shells,
 // straight, where a real block's taper and are thicker). Laid in a wall, a unit's course is its gauge
 // (`bricks.usModular.gauge`: three courses to 8").
 
