@@ -13,8 +13,8 @@
 // of the bar's trusses under it: the wing's top there is its surface only. In building the bar is sheathed first and
 // the set sits on the sheathing; here it sits on the chords.) Snow 25 psf on plan.
 
-import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, psf, type Length } from "fettled";
-import { perimeter, tee, framing } from "fettled/walls";
+import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, psf, type Length, join } from "fettled";
+import { perimeter, framing } from "fettled/walls";
 import { roofSurface, trussRow, fink } from "fettled/framing";
 import { row } from "fettled/runs";
 import { sheets } from "fettled/products";
@@ -39,7 +39,7 @@ export default part("a roof that turns a corner", () => {
   // The bar's walls, and the wing's three, out from the bar's front and back to it, teed onto its outside.
   const walls = perimeter("walls", { corners: [at(0, 0), at(bar, 0), at(bar, deep), at(0, deep)], legs: [{ ...legs, backs: [{ at: inch(from + d / 2), width: chord.depth }, { at: inch(from + wing - d / 2), width: chord.depth }] }, legs, legs, legs] });
   const wingWalls = perimeter("wing walls", { corners: [at(from, 0), at(from, -out), at(from + wing, -out), at(from + wing, 0)], closed: false, legs });
-  const tees = [tee(walls.legs[0], wingWalls.legs[0], inch(from + d / 2), { side: "outside" }), tee(walls.legs[0], wingWalls.legs[2], inch(from + wing - d / 2), { end: "end", side: "outside" })];
+  const tees = [join(wingWalls.legs[0].start, walls.legs[0].outside.along(inch(from + d / 2))), join(wingWalls.legs[2].end, walls.legs[0].outside.along(inch(from + wing - d / 2)))];
   // The roof's surface: the bar, its eaves along its front and back; the wing, its eaves along its sides, run on into
   // the bar to its ridge, its far gable with no rake.
   const roof = roofSurface("roof", {

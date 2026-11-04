@@ -20,9 +20,9 @@
 // starts, whichever lands more of them on studs; a seam that lands on no stud is said, and a sheet narrower than the
 // studs' spacing: none here. A reading of where a layer's seams are (`seamsMoved`) lays its sheets out again from there.
 
-import { part, node, sub, lumber, nominal, DFL, mm, inch, ft } from "fettled";
+import { part, node, sub, lumber, nominal, DFL, mm, inch, ft, join } from "fettled";
 import { slab } from "fettled/framing";
-import { wall, perimeter, tee, panels, framing } from "fettled/walls";
+import { wall, perimeter, panels, framing } from "fettled/walls";
 import { sheets } from "fettled/products";
 
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
@@ -44,6 +44,6 @@ export default part("sheathed and drywalled", () => {
   // 16' long, are four whole sheets each, not four and a sliver.)
   const walls = perimeter("walls", { corners, legs: [legs.front, legs.side, legs.back, legs.side], names: ["front", "right", "back", "left"], layers: [undefined, "b", undefined, "b"] });
   const partition = wall("partition", { from: node(mm(3044.45), twoBySix.depth, 0), to: node(mm(3044.45), sub(deep, twoBySix.depth), 0), height, build: [gwb, framing(twoByFour, { spacing: inch(16) }), gwb] });
-  const tees = [tee(walls.legs[0], partition, mm(3000)), tee(walls.legs[2], partition, mm(4876.8 - 3000), { end: "end" })];
+  const tees = [join(partition.start, walls.legs[0].inside.along(mm(3000))), join(partition.end, walls.legs[2].inside.along(mm(4876.8 - 3000)))];
   return { slab: floor, walls, partition, tees };
 });

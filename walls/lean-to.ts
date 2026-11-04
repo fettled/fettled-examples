@@ -9,7 +9,7 @@
 // outside, an X, both backed by the same pair of studs; the partition's upper top plate laps over the back's, the
 // wing's stops at it.
 
-import { part, node, hinted, lumber, nominal, DFL, mm, inch } from "fettled";
+import { part, node, hinted, lumber, nominal, DFL, mm, inch, join } from "fettled";
 import { slab } from "fettled/framing";
 import { wall, perimeter, tee, framing } from "fettled/walls";
 
@@ -39,6 +39,6 @@ export default part("lean-to", () => {
   const x = 4000 - 2400;
   const partition = wall("partition", { from: node(mm(x - 44.5), mm(back), 0), to: node(mm(x - 44.5), mm(1500), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
   const wing = wall("wing", { from: node(mm(x + 44.5), mm(3000), 0), to: node(mm(x + 44.5), mm(4200), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
-  const tees = [tee(walls.legs[2], partition, along), tee(walls.legs[2], wing, along, { side: "outside", lap: false })];
+  const tees = [join(partition.start, walls.legs[2].inside.along(along)), join(wing.start, walls.legs[2].outside.along(along), tee({ lap: false }))];
   return { slab: floor, walls, partition, wing, tees };
 });

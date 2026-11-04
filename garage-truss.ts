@@ -45,7 +45,7 @@ export default part("existing garage truss", (g) => {
   const corner = (x: Length, z: Length) => node(free(x), sub(inch(48), mm(19.05)), free(z));
   const outerCorner = corner(ft(3), add(height, mm(140))), chordEnd = corner(ft(25), height);
   const centreFoot = corner(ft(12.5), add(height, mm(140))), verticalFoot = corner(ft(19), add(height, mm(140)));
-  const wallMiddle = (w: typeof left) => plane(w.start, w.end, w.startUp);
+  const wallMiddle = (w: typeof left) => plane(w.start.node, w.end.node, w.startUp);
   const [centreLine, verticalLine] = [line(T.points.P, T.points.C), line(T.points["T1'"], T.points.B3)];
   const middles = { left: wallMiddle(left), right: wallMiddle(right) };
   return {
