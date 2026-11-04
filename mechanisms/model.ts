@@ -6,11 +6,7 @@
 
 import { part, place, placed, mm } from "fettled";
 import fourBar from "./four-bar";
-import lidAndItsStop from "./lid-and-its-stop";
-import drawer from "./drawer";
 
 export default part("mechanisms", {
   fourBar: place(fourBar, placed({ origin: [mm(5), mm(6), 0] })),
-  lidAndItsStop: place(lidAndItsStop, placed({ origin: [mm(311), mm(10), 0] })),
-  drawer: place(drawer, placed({ origin: [mm(451), mm(0), 0] })),
 });

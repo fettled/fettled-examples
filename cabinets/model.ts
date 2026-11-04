@@ -10,7 +10,6 @@
 import { part, place, placed, plane, node, support, mm, inch } from "fettled";
 import { cabinet, counter, doors, drawer, glass, shaker } from "fettled/cabinets";
 import baseWithADrawerAndDoors from "./base-with-a-drawer-and-doors";
-import drawerBase from "./drawer-base";
 import wallWithGlassDoors from "./wall-with-glass-doors";
 
 export default part("cabinets", () => {
@@ -29,7 +28,6 @@ export default part("cabinets", () => {
     }),
     examples: part("examples", {
       baseWithADrawerAndDoors: place(baseWithADrawerAndDoors, placed({ origin: [inch(110), 0, 0] })),
-      drawerBase: place(drawerBase, placed({ origin: [inch(140), 0, 0] })),
       wallWithGlassDoors: place(wallWithGlassDoors, placed({ origin: [inch(164), 0, 0] })),
     }),
   };

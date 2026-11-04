@@ -1,20 +1,24 @@
-// A wall's build-up (fettled/walls): the shed of `legs.ts`, sheathed outside in 7/16" OSB stood on end and lined
-// inside with ½" gypsum board laid on its side, and its partition lined both sides.
+// A shed (fettled/walls): four legs on a slab, two of 2x6 and two of 2x4, a door under a flush header in the front, a
+// window in the back, and a partition of 2x4 teed into the front and the back from the inside; each leg made of its
+// build-up, from outside in: 7/16" OSB stood on end, its framing, ½" gypsum board laid on its side; the partition
+// lined both sides.
 //
-// Each layer is said of a leg, from its studs out (`outside`, `inside`: `panels(sheet, …)`). Its sheets are laid from
-// the leg's start along it, cut to its face (its base and its top, and round its door's and window's rough openings),
-// and nailed to every stud each crosses: 6" apart at its edges and 12" between (6d commons for ½" and less, IRC
-// R602.3(1); the gypsum board's screws stood in for by them). Nailed so, each sheet's weight goes into its studs.
+// Each leg runs between two corners of its outside face, anticlockwise seen from above. Where two meet their plates
+// lap, and each one's end stud stands inside the other's inside face: so a 2x4 leg meeting a 2x6 one stops its end
+// stud 140 in from the corner, the 2x6 one 89 in. The partition's bottom and lower top plates end on the front's inside
+// face; its upper top plate laps over the front's lower one; the front has a stud each side of it to back it (where it
+// is said to be teed into it), its end stud nailed to them. So at the back.
 //
+// Each layer's sheets are laid along its leg, cut to its face (its base, its top, round its door's and window's rough
+// openings), and nailed to every stud each crosses: 6" apart at its edges and 12" between (6d commons for ½" and less,
+// IRC R602.3(1); the gypsum board's screws stood in for by them). Nailed so, each sheet's weight goes into its studs.
 // At each corner, outside, one leg's sheathing runs past its end over the other's edge (here the sides', `layers`);
-// inside, one leg's gypsum board stops at the other's, which runs into the corner. Where the partition is teed in, its
-// gypsum board stops at the front's and the back's, which run on behind it.
+// inside, one leg's gypsum board stops at the other's, which runs into the corner. Where the partition is teed in, the
+// front's and the back's gypsum board stops either side of it, as a partition framed before it is lined.
 //
 // Each layer's seams are a whole sheet apart: from where its studs are laid out from, or from where the layer itself
-// starts, whichever lands more of them on studs (here the OSB's from the outside corners, on the 16" and 24" layouts,
-// and over the door on its header; the gypsum board's from the outside corners too, though it starts 5½" or 3½" in
-// from them, so its first sheet is cut). A seam that lands on no stud is said, and a sheet narrower than the studs'
-// spacing: none here.
+// starts, whichever lands more of them on studs; a seam that lands on no stud is said, and a sheet narrower than the
+// studs' spacing: none here. A reading of where a layer's seams are (`seamsMoved`) lays its sheets out again from there.
 
 import { part, node, sub, lumber, nominal, DFL, mm, inch, ft } from "fettled";
 import { slab } from "fettled/framing";

@@ -15,13 +15,13 @@ its parts.
 | Topic | What its examples show |
 |---|---|
 | [joinery/](joinery) | How members meet: butt, cope, mitre, lap, housing, birdsmouth, mortise and tenon, tube onto timber |
-| [walls/](walls) | Walls as legs (`fettled/walls`): corners, tees, openings, sloping tops, what they stand on |
-| [floors/](floors) | A beam on posts, a loft, a second storey, a stairwell, an open-web floor, what a floor is made of |
-| [roofs/](roofs) | Hips, valleys, a dormer, a saltbox, raised heels, a girder truss, trusses of your own, the truss types |
+| [walls/](walls) | Walls as legs (`fettled/walls`), each made of its build-up (framing, sheathing, gypsum board): a shed, an L, a lean-to |
+| [floors/](floors) | A second storey, a stairwell, an open-web floor, what a floor and a roof are made of |
+| [roofs/](roofs) | Hips, valleys, a dormer, a girder truss, trusses of your own, the truss types |
 | [as-built/](as-built) | Taped, surveyed, scanned or already made, and the rest found to suit (and the table library) |
-| [sheet/](sheet) | A folded bracket (a library the corner of walls includes), a sheet bracket on a T-slot rail, welded seams |
+| [sheet/](sheet) | A folded bracket (a library part, as another model includes one), a sheet bracket on a T-slot rail, welded seams |
 | [volumes/](volumes) | Extrusions ended on faces, a revolve, a sweep, a loft, a carve, a clearance |
-| [mechanisms/](mechanisms) | A four-bar linkage, a lid and a drawer, each opened until it meets something |
+| [mechanisms/](mechanisms) | A four-bar linkage (doors and drawers opening until they meet something: cabinets/) |
 | [cabinets/](cabinets) | Frameless kitchen cabinets (`fettled/cabinets`): slab, shaker and glass fronts, doors and drawers through their ranges, a run under a counter |
 | [products/](products) | The building products of the tables (`fettled/products`): bricks and blocks, sheet goods, tiles, sidings and trims |
 

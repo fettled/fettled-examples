@@ -7,16 +7,12 @@
 import { part, place, placed, mm } from "fettled";
 import asMeasured from "./as-measured";
 import unevenFloor from "./uneven-floor";
-import placedByACorner from "./placed-by-a-corner";
 import slabReadFromAScan from "./slab-read-from-a-scan";
-import floorOnWallsAsBuilt from "./floor-on-walls-as-built";
 import headerAndTrussRow from "./header-and-truss-row";
 
 export default part("as built", {
   asMeasured: place(asMeasured, placed({ origin: [mm(0), mm(0), 0] })),
   unevenFloor: place(unevenFloor, placed({ origin: [mm(2950), mm(-50), 0] })),
-  placedByACorner: place(placedByACorner, placed({ origin: [mm(919), mm(-2675), 0] })),
   slabReadFromAScan: place(slabReadFromAScan, placed({ origin: [mm(12796), mm(0), 0] })),
-  floorOnWallsAsBuilt: place(floorOnWallsAsBuilt, placed({ origin: [mm(0), mm(6307), 0] })),
   headerAndTrussRow: place(headerAndTrussRow, placed({ origin: [mm(5677), mm(6686), 0] })),
 });
