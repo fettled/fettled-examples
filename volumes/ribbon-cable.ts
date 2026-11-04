@@ -18,7 +18,7 @@
 
 import { part, placed, strip, stripSocket, connect, materials, mm, deg } from "fettled";
 
-export default part("ribbon cables", () => {
+export default part("ribbon cables", (self) => {
   const laid = strip("laid", {
     width: mm(16),
     thickness: mm(0.3),
@@ -32,12 +32,11 @@ export default part("ribbon cables", () => {
   // across it along x, its top toward −y. The Pi's: the cable goes into it down, so its x is up, across it along x.)
   const camera = stripSocket("camera", { width: mm(16), deep: mm(4), material: materials.PETG, at: placed({ x: [0, 0, -1], y: [1, 0, 0] }) });
   const pi = stripSocket("pi", { width: mm(16), deep: mm(4), material: materials.PETG, at: placed({ origin: [mm(30), mm(45), mm(-70)], x: [0, 0, 1], y: [-1, 0, 0] }) });
-  const routed = connect("routed", camera, pi, { thickness: mm(0.3), length: mm(120), pieces: 10, material: materials.ABS });
+  connect(self, "routed", camera, pi, { thickness: mm(0.3), length: mm(120), pieces: 10, material: materials.ABS });
 
   return {
     laid,
     camera,
     pi,
-    routed,
   };
 });

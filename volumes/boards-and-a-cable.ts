@@ -4,8 +4,9 @@
 // A board (`board`) is a plate of FR-4, 65 by 30 and 1.6 thick, a hole at each corner to mount it by, and a socket
 // for a flat flex 16 wide (`stripSocket`) on its top at one end, its mouth to that end: a strip leaves it along the board's
 // x. Two are placed, the second turned to face back at the first, further on and higher, and turned a little about the
-// way up. `connect` lays a strip out of the one's socket and into the other's: its pieces are found as near flat and as
-// little fanned as that leaves them, none creased. The second board moves (its x, y and z free): drag it, and the cable
+// way up. `connect` lays a strip out of the one's socket and into the other's, once where they are is found: from a
+// shape had of where the sockets are, its pieces are found as near flat and as little fanned as that leaves them, none
+// creased. The second board moves (its x, y and z free): drag it, and the cable
 // follows.
 
 import { part, node, placed, joints, hinted, stripSocket, connect, extrusion, polygon, circle, materials, mm, deg, cos, sin, type Frame } from "fettled";
@@ -25,11 +26,12 @@ export function board(name: string, o: { at?: Frame } = {}) {
   });
 }
 
-export default part("boards and a cable", () => {
-  // (The second turned about the way up to face back at the first, and 15° more.)
+export default part("boards and a cable", (self) => {
+  // (The second turned about the way up to face back at the first, and 15° more. It moves: its x, y and z free from
+  // where it is placed, hinted there, so it may be dragged, and the cable is found again.)
   const turn = deg(195);
   const a = board("a");
-  // (It moves: its x, y and z free from where it is placed, so it may be dragged, and the cable is found again.)
   const b = board("b", { at: placed({ origin: [mm(165), mm(45), mm(25)], x: [cos(turn), sin(turn), 0], y: [-sin(turn), cos(turn), 0], joint: joints.moves({ x: hinted(mm(0)), y: hinted(mm(0)), z: hinted(mm(0)) }) }) });
-  return { a, b, cable: connect("cable", a.socket, b.socket, { thickness: mm(0.3), length: mm(80), pieces: 10, material: materials.ABS }) };
+  connect(self, "cable", a.socket, b.socket, { thickness: mm(0.3), length: mm(80), pieces: 10, material: materials.ABS });
+  return { a, b };
 });
