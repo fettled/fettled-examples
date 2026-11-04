@@ -14,6 +14,7 @@ import wheelWell from "./wheel-well";
 import clearance from "./clearance";
 import downpipeAndCable from "./downpipe-and-cable";
 import ribbonCable from "./ribbon-cable";
+import boardsAndACable from "./boards-and-a-cable";
 
 export default part("volumes", {
   bracketExtrudedToAPlate: place(bracketExtrudedToAPlate, placed({ origin: [mm(1), mm(0), 0] })),
@@ -24,4 +25,5 @@ export default part("volumes", {
   clearance: place(clearance, placed({ origin: [mm(101), mm(90), 0] })),
   downpipeAndCable: place(downpipeAndCable, placed({ origin: [mm(500), 0, 0] })),
   ribbonCable: place(ribbonCable, placed({ origin: [mm(260), mm(-150), mm(120)] })),
+  boardsAndACable: place(boardsAndACable, placed({ origin: [mm(500), mm(-200), 0] })),
 });

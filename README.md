@@ -20,7 +20,7 @@ its parts.
 | [roofs/](roofs) | Hips, valleys, a dormer, a saltbox, raised heels, a girder truss, trusses of your own, the truss types |
 | [as-built/](as-built) | Taped, surveyed, scanned or already made, and the rest found to suit (and the table library) |
 | [sheet/](sheet) | A folded bracket (a library the corner of walls includes), a sheet bracket on a T-slot rail, welded seams |
-| [volumes/](volumes) | Extrusions ended on faces, a revolve, a sweep, a loft, a carve, a clearance, sweeps bent round their corners (a downpipe, a cable), ribbon cables bent without stretching (laid by hand, and found from where they plug in) |
+| [volumes/](volumes) | Extrusions ended on faces, a revolve, a sweep, a loft, a carve, a clearance, sweeps bent round their corners (a downpipe, a cable), ribbon cables bent without stretching (laid by hand, found from where they plug in, and connected board to board) |
 | [mechanisms/](mechanisms) | A four-bar linkage, a lid and a drawer, each opened until it meets something |
 
 There are also whole things, each a file (with its sidecars, where it has them):

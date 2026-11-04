@@ -12,11 +12,11 @@
 //
 // The second is a camera's cable, 16 wide and 0.3 thick (a Raspberry Pi camera's, fifteen ways at a millimetre), 120
 // long: from the camera's socket, down from the bottom of its board, to the Pi's, 70 below, 30 across and 45 out, which
-// it goes into down as it left the camera. Its ten pieces are free, and where its end is is said: in the Pi's socket,
-// along it and across it as the socket is. Its folds and rulings are found as near flat and as little fanned as that
-// leaves them, none creased (nowhere bent tighter than half its thickness): an S down and out, aside as it goes.
+// it goes into down as it left the camera: connected socket to socket (`connect`), its ten pieces free. Its folds and
+// rulings are found for where the sockets are, as near flat and as little fanned as that leaves them, none creased
+// (nowhere bent tighter than half its thickness): an S down and out, aside as it goes.
 
-import { part, node, placed, strip, coincide, must, extrusion, polygon, materials, mm, deg } from "fettled";
+import { part, placed, strip, stripSocket, connect, materials, mm, deg } from "fettled";
 
 export default part("ribbon cables", () => {
   const laid = strip("laid", {
@@ -28,29 +28,16 @@ export default part("ribbon cables", () => {
     at: placed({ origin: [mm(-120), 0, 0] }),
   });
 
-  // (A socket, in the frame of the cable where it is in it: its x along the cable, its y across, its z up from its top.
-  // Its body, 22 across and 5 thick, 4 along the cable: behind where the cable leaves it (`from`), or past where it goes
-  // in. The camera's: the cable leaves it down, across it along x, its top toward −y. The Pi's: the cable goes in down,
-  // across it along y, its top toward x.)
-  const socket = (name: string, origin: [number, number, number], x: [number, number, number], y: [number, number, number], from: boolean) => {
-    const [a, b] = from ? [-4, 0] : [0, 4];
-    const c = (u: number, v: number) => node(mm(u), mm(v), mm(-2.5));
-    const corners = [c(a, -11), c(b, -11), c(b, 11), c(a, 11)];
-    return part(name, { o: node(0, 0, 0), ahead: node(mm(16), 0, 0), left: node(0, mm(16), 0), corners }, {
-      at: placed({ origin: [mm(origin[0]), mm(origin[1]), mm(origin[2])], x, y }),
-      kind: "solid",
-      shapes: [extrusion(polygon(...corners), { from: mm(-2.5), to: mm(2.5), material: materials.PETG })],
-    });
-  };
-  const camera = socket("camera", [0, 0, 0], [0, 0, -1], [1, 0, 0], true);
-  const pi = socket("pi", [30, 45, -70], [0, 0, -1], [1, 0, 0], false);
-  const routed = strip("routed", { width: mm(16), thickness: mm(0.3), length: mm(120), pieces: 10, material: materials.ABS, at: placed({ x: [0, 0, -1], y: [1, 0, 0] }) });
+  // (Each socket in the frame of a strip in it: its x the way a strip leaves it. The camera's: the cable leaves it down,
+  // across it along x, its top toward −y. The Pi's: the cable goes into it down, so its x is up, across it along x.)
+  const camera = stripSocket("camera", { width: mm(16), deep: mm(4), material: materials.PETG, at: placed({ x: [0, 0, -1], y: [1, 0, 0] }) });
+  const pi = stripSocket("pi", { width: mm(16), deep: mm(4), material: materials.PETG, at: placed({ origin: [mm(30), mm(45), mm(-70)], x: [0, 0, 1], y: [-1, 0, 0] }) });
+  const routed = connect("routed", camera, pi, { thickness: mm(0.3), length: mm(120), pieces: 10, material: materials.ABS });
 
   return {
     laid,
     camera,
     pi,
     routed,
-    plugged: { o: must(coincide(routed.end.o, pi.o)), ahead: must(coincide(routed.end.ahead, pi.ahead)), left: must(coincide(routed.end.left, pi.left)) },
   };
 });
