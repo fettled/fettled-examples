@@ -13,7 +13,8 @@
 
 import { part, node, plane, support, bears, frame, areaLoad, cases, lumber, nominal, DFL, inch, ft, mm, psf, add, sub, mul, div, type Feature, type Frame, type Length, type PartBase } from "fettled";
 import { perimeter } from "fettled/walls";
-import { fink, trussRow, row } from "fettled/framing";
+import { fink, trussRow } from "fettled/framing";
+import { row } from "fettled/runs";
 import { fan, kingPost, howe, pratt, scissors, mono, raisedHeel } from "fettled/trusses";
 
 const stud = lumber(nominal["2x4"], DFL.No2), chord = stud;

@@ -12,7 +12,8 @@
 
 import { part, node, free, plane, support, placed, joints, frame, span, must, hinted, parallel, coincide, lumber, nominal, DFL, add, div, sub, inch, ft, m, mm } from "fettled";
 import { perimeter } from "fettled/walls";
-import { fink, trussRow, row } from "fettled/framing";
+import { fink, trussRow } from "fettled/framing";
+import { row } from "fettled/runs";
 
 const stud = lumber(nominal["2x4"], DFL.No2), post4 = lumber(nominal["4x4"], DFL.No2);
 const [wide, deep, height] = [ft(16), ft(12), ft(8)];

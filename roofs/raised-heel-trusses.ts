@@ -10,8 +10,10 @@
 
 import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, as, psf, type Length } from "fettled";
 import { perimeter } from "fettled/walls";
-import { roofSurface, trussRow, row } from "fettled/framing";
+import { roofSurface, trussRow } from "fettled/framing";
+import { row } from "fettled/runs";
 import { raisedHeel } from "fettled/trusses";
+import { sheets } from "fettled/products";
 
 const stud = lumber(nominal["2x6"], DFL.No2), chord = lumber(nominal["2x4"], DFL.No2);
 const [wide, deep, height, pitch] = [24, 32, 96, 4 / 12];
@@ -26,7 +28,7 @@ export default part("raised-heel trusses", () => {
   // The roof over the 24' (x), its eaves along the front (x = 0) and the back (x = 24'), gables at the ends.
   const roof = roofSurface("roof", {
     parts: [{ outline: [[0, 0], [ft(wide), 0], [ft(wide), ft(deep)], [0, ft(deep)]], edges: [null, eave(back), null, eave(front)], rake: ft(1) }],
-    build: layers(weights.asphaltShingles, weights.osb7_16),
+    build: layers(weights.asphaltShingles, sheets.osb7_16),
   });
   // The trusses across the 24', every 24" along the 32' from its far end, their heels on the walls' plates at the front
   // wall's outside: the row's x back along y, its y across x (so its z is up).

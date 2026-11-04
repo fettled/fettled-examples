@@ -10,6 +10,7 @@
 
 import { part, layers, weights, inch, ft, type Length } from "fettled";
 import { roofSurface } from "fettled/framing";
+import { sheets } from "fettled/products";
 
 const [pitch, wall] = [6 / 12, 96];
 /** A rectangle on plan, in feet: its corners anticlockwise from its low x, low y; its edges in that order (along low y,
@@ -29,7 +30,7 @@ export default part("a roof of parts", () => {
       // ridge (8' in from each) is the main's; a gable at its far end, none where it runs into the main roof (low y).
       { outline: rect(8, 10, 24, 34), edges: [null, eave(ridge - 96 * pitch), null, eave(ridge - 96 * pitch)], rake: ft(1), rakes: [0, undefined, undefined, undefined] },
     ],
-    build: layers(weights.asphaltShingles, weights.roofingFelt, weights.osb7_16),
+    build: layers(weights.asphaltShingles, weights.roofingFelt, sheets.osb7_16),
   });
   return { roof };
 });

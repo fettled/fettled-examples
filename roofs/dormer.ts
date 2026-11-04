@@ -10,6 +10,7 @@
 import { part, node, plane, support, layers, weights, lumber, nominal, DFL, inch, ft, mm, type Length } from "fettled";
 import { perimeter } from "fettled/walls";
 import { roofSurface } from "fettled/framing";
+import { sheets } from "fettled/products";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const [wide, deep] = [24, 20];
@@ -26,7 +27,7 @@ export default part("a dormer", () => {
       // The dormer: its eaves along its sides, 11' up; its front a gable, its back run into the main roof.
       { outline: rect(9, 2, 15, 10), edges: [null, eave(6 / 12, ft(11), inch(6)), null, eave(6 / 12, ft(11), inch(6))], rake: inch(6) },
     ],
-    build: layers(weights.asphaltShingles, weights.roofingFelt, weights.osb7_16),
+    build: layers(weights.asphaltShingles, weights.roofingFelt, sheets.osb7_16),
   });
   const ground = [node(0, 0, 0), node(mm(1), 0, 0), node(0, mm(1), 0)];
   return { walls, roof, ground, slab: support(plane(ground[0], ground[1], ground[2])) };

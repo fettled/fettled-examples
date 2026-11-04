@@ -7,7 +7,8 @@
 // and back walls; roof dead load 20 psf and snow 25 psf on plan.
 
 import { part, node, plane, support, frame, neg, areaLoad, cases, lumber, nominal, DFL, add, div, ft, ftIn, inch, mm, psf, pitch } from "fettled";
-import { fink, row } from "fettled/framing";
+import { fink } from "fettled/framing";
+import { row } from "fettled/runs";
 import { perimeter, type Opening } from "fettled/walls";
 
 const width = ft(24), depth = ft(22), height = ftIn(8, 1.125);

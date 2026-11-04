@@ -15,9 +15,10 @@
 // trusses span the 20', 4 in 12, every 24".
 
 import { part, node, plane, support, areaLoad, cases, roles, layers, weights, frame, neg, lumber, nominal, DFL, add, div, inch, ft, mm, as, psf, type Length, type Length0 } from "fettled";
-import { row } from "fettled/framing";
+import { row } from "fettled/runs";
 import { perimeter } from "fettled/walls";
 import { truss } from "fettled/trusses";
+import { sheets } from "fettled/products";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const six = lumber(nominal["2x6"], DFL.No2);
@@ -58,8 +59,8 @@ export default part("a flat roof on trusses of your own", () => {
     ground,
     slab: support(plane(ground[0], ground[1], ground[2])),
     loads: {
-      slopeCovering: areaLoad(roof, layers(weights.standingSeam24ga, weights.polystickMts, weights.plywood15_32).pressure, cases.dead, { plan: false, within: slope }),
-      canopyCovering: areaLoad(roof, layers(weights.tpo60mil, weights.plywood15_32).pressure, cases.dead, { within: flat, carriedBy: roles.bottomChord }),
+      slopeCovering: areaLoad(roof, layers(weights.standingSeam24ga, weights.polystickMts, sheets.ply15_32).pressure, cases.dead, { plan: false, within: slope }),
+      canopyCovering: areaLoad(roof, layers(weights.tpo60mil, sheets.ply15_32).pressure, cases.dead, { within: flat, carriedBy: roles.bottomChord }),
       slopeSnow: areaLoad(roof, psf(25), cases.snow, { within: slope }),
       canopySnow: areaLoad(roof, psf(25), cases.snow, { within: flat, carriedBy: roles.bottomChord }),
       canopyLive: areaLoad(roof, psf(20), cases.roofLive, { within: flat, carriedBy: roles.bottomChord }),

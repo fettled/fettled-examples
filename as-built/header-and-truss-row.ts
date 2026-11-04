@@ -14,9 +14,11 @@
 //   cosine's share, 3.45: each covering rests on the first common and on the gable, clear of the commons between.
 
 import { part, bears, node, free, plane, support, frame, areaLoad, cases, designBasis, must, on, facing, layers, weights, lumber, nominal, DFL, add, div, sub, ft, inch, mm, psf, pitch, as, type Length } from "fettled";
-import { fink, headerOnPosts, trussRow, row, covering } from "fettled/framing";
+import { fink, headerOnPosts, trussRow, covering } from "fettled/framing";
+import { row } from "fettled/runs";
 import { truss } from "fettled/trusses";
 import { wall } from "fettled/walls";
+import { sheets } from "fettled/products";
 
 const width = ft(12), depth = ft(16), wallHeight = mm(2439);
 const twoBySix = lumber(nominal["2x6"], DFL.No2), twoByFour = lumber(nominal["2x4"], DFL.No2);
@@ -54,7 +56,7 @@ export default part("trusses on a header", (self) => {
   // The coverings: each slope's from its eaves (the top chords' ends, 12" past the heels on plan) to the peak, the
   // length of the row; its underside on the top faces of the first truss's chord and the gable's, each node found on
   // that face where it is on plan.
-  const build = layers(weights.asphaltShingles, weights.roofingFelt, weights.osb7_16);
+  const build = layers(weights.asphaltShingles, weights.roofingFelt, sheets.osb7_16);
   const [y0, peak, y1] = [-3 * 38.1 / 2 - 304.8, -3 * 38.1 / 2 + as(span, mm) / 2, -3 * 38.1 / 2 + as(span, mm) + 304.8];
   type Chord = Parameters<typeof facing>[0];
   const first = roof.trusses[0] as unknown as Record<"left" | "right", Chord>, gable = roof.trusses[stations.length - 1] as unknown as { top: Chord[] };

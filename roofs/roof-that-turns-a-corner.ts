@@ -15,7 +15,9 @@
 
 import { part, node, plane, support, frame, areaLoad, cases, layers, weights, lumber, nominal, DFL, inch, ft, mm, psf, type Length } from "fettled";
 import { perimeter, tee } from "fettled/walls";
-import { roofSurface, trussRow, fink, row } from "fettled/framing";
+import { roofSurface, trussRow, fink } from "fettled/framing";
+import { row } from "fettled/runs";
+import { sheets } from "fettled/products";
 
 const chord = lumber(nominal["2x4"], DFL.No2);
 const pitch = 6 / 12;
@@ -45,7 +47,7 @@ export default part("a roof that turns a corner", () => {
       { outline: [[0, 0], [inch(bar), 0], [inch(bar), inch(deep)], [0, inch(deep)]], edges: [eave(plate + heel), null, eave(plate + heel), null], rake: inch(12) },
       { outline: [[inch(from), inch(-out)], [inch(from + wing), inch(-out)], [inch(from + wing), inch(deep / 2)], [inch(from), inch(deep / 2)]], edges: [null, eave(plate + heel), null, eave(plate + heel)], rake: inch(12), rakes: [undefined, undefined, 0, undefined] },
     ],
-    build: layers(weights.asphaltShingles, weights.roofingFelt, weights.osb7_16),
+    build: layers(weights.asphaltShingles, weights.roofingFelt, sheets.osb7_16),
   });
   // The bar's trusses, across it, every 24" along it; the wing's, across it, from its front back to the bar's eave
   // (short of its tails, which run out 12" past its wall). Each bottom chord's underside on the plates.

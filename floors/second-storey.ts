@@ -9,7 +9,8 @@
 // across the 12', 6 in 12, 12" past the walls, every 24". The floor's dead load 10 psf and live load 40 psf.
 
 import { part, node, free, plane, support, areaLoad, cases, must, on, offset, placed, joints, frame, add, sub, div, fit, lumber, nominal, DFL, inch, ft, mm, psf } from "fettled";
-import { floor, fink, row } from "fettled/framing";
+import { floor, fink } from "fettled/framing";
+import { row } from "fettled/runs";
 import { perimeter } from "fettled/walls";
 
 const stud = lumber(nominal["2x4"], DFL.No2);

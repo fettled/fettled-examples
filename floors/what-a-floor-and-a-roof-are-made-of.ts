@@ -10,14 +10,16 @@
 // load 40 psf on the floor, snow 25 psf on the roof.
 
 import { part, node, free, plane, support, areaLoad, cases, must, on, offset, placed, joints, frame, add, sub, div, fit, lumber, nominal, DFL, inch, ft, mm, psf, layers, weights, type Length } from "fettled";
-import { floor, fink, row } from "fettled/framing";
+import { floor, fink } from "fettled/framing";
+import { row } from "fettled/runs";
 import { perimeter } from "fettled/walls";
+import { sheets } from "fettled/products";
 
 const stud = lumber(nominal["2x4"], DFL.No2);
 const joist = lumber(nominal["2x10"], DFL.No2);
 const [wide, deep, height] = [ft(12), ft(16), ft(8)];
-const decking = layers(weights.hardwoodFlooring7_8, weights.plywood23_32);
-const covering = layers(weights.standingSeam24ga, weights.polystickMts, weights.plywood15_32);
+const decking = layers(weights.hardwoodFlooring7_8, sheets.ply23_32);
+const covering = layers(weights.standingSeam24ga, weights.polystickMts, sheets.ply15_32);
 const deck = decking.layers!.reduce((t: Length, l) => add(t, l.thickness), mm(0));
 // (A storey of walls on their outsides' corners, where it stands.)
 const storey = (name: string, at?: ReturnType<typeof placed>) =>
