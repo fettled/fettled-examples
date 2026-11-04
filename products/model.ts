@@ -13,7 +13,7 @@ import profiles from "./profiles";
 
 export default part("products", {
   bricksAndBlocks: place(bricksAndBlocks, placed({ origin: [0, 0, 0] })),
-  sheetGoods: place(sheetGoods, placed({ origin: [0, mm(700), 0] })),
-  tiles: place(tiles, placed({ origin: [0, mm(1500), 0] })),
-  profiles: place(profiles, placed({ origin: [0, mm(2300), 0] })),
+  sheetGoods: place(sheetGoods, placed({ origin: [0, mm(1200), 0] })),
+  tiles: place(tiles, placed({ origin: [0, mm(2000), 0] })),
+  profiles: place(profiles, placed({ origin: [0, mm(2800), 0] })),
 });
