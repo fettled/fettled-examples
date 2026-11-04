@@ -2,7 +2,7 @@
 // which opens by itself (as any part does) or may be copied out to start from.
 //
 // Solids beyond members and plates: an extrusion ended on a face, a revolve, a sweep, a loft, a block carved by
-// another, a clearance kept between faces (docs/volumes-plan.md), and routes bent along polylines.
+// another, a clearance kept between faces (docs/volumes-plan.md), and sweeps along nodes bent round their corners.
 
 import { part, place, placed, mm } from "fettled";
 import bracketExtrudedToAPlate from "./bracket-extruded-to-a-plate";
