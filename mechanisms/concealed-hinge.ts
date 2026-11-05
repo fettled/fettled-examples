@@ -8,7 +8,8 @@
 // (its y up the door's edge), everything turns about y: the links and the door move in the plane across (planar joints),
 // the arm and the side do not.
 //
-// The hinge's design is its pivots: free, each hinted where a first guess (a search of linkages) puts it. Its motion
+// The hinge's design is its pivots, and where each link is cranked (bent so far along it and so far to its side, to
+// reach round what a straight bar would meet): free, each hinted where a first guess (a search of linkages) puts it. Its motion
 // opens the door: its angle 110° times the motion's time; at time 0 shut (where it is drawn). At every time each link
 // is pinned at its ends (a link is rigid: its length is designed, as its pivots are); the door's hinged edge clear of the
 // side (in front of its face, or past its outer face); and every place along the links and along the arm's edges either
@@ -17,7 +18,7 @@
 // two links, not one on the other. What must hold moves the pivots from their guess; what gives way (the hints) says by
 // how much.
 
-import { part, node, line, free, hinted, placed, joints, motion, must, is, coincide, atLeast, dist, placeIn, max, min, add, sub, mul, cut, extrusion, revolve, polygon, mm, deg, materials, type Corner, type Node, type Num, type PartBase } from "fettled";
+import { part, node, line, free, hinted, figure, levels, placed, frame, joints, motion, must, is, coincide, atLeast, dist, placeIn, max, min, add, sub, mul, cut, extrusion, revolve, polygon, mm, deg, materials, type Corner, type Node, type Num, type PartBase } from "fettled";
 import { sheets } from "fettled/products";
 
 // The side, the door and the cup (mm).
@@ -32,9 +33,8 @@ const linkBands: [number, number][] = [[1.5, 5.5], [-5.5, -1.5]];
 const halfWidth = (h: number, own: number) => Math.sqrt((cupR - cupWall) ** 2 - h * h) - own - 0.3;
 const floorAt = cupDepth - cupFloor - 0.3;
 // The first guess at the pivots (the arm's A and B, the cup's C and D: A to C and B to D), across from the cup's middle
-// and deep into the door from its back: a search of linkages for one that keeps what this says (scratch, in the plane
-// across, more finely sampled), each pivot kept apart from the other as this does.
-const guess = { A: [16, -10], B: [30, -2.47], C: [-14.41, 1.29], D: [-8.22, 2.38] };
+// and deep into the door from its back; each link straight to begin with (bent at its middle, not off to its side).
+const guess = { A: [16, -10], B: [30, -2.47], C: [-14.41, 1.29], D: [-8.22, 2.38], cranks: [[0.5, 0], [0.5, 0]] };
 const pivot = ([a, d]: number[]) => node(hinted(mm(xc + a)), 0, hinted(mm(d)));
 
 /** A slab across the hinge: its outline's corners (nodes in the frame of the part it is of, at y = 0) carried along that
@@ -103,21 +103,33 @@ export default part("concealed hinge", (self) => {
   const plate = slab("plate", [node(0, 0, mm(-50)), node(mm(x0), 0, mm(-50)), node(mm(x0), 0, mm(-24)), node(0, 0, mm(-24))], -21, 21, materials.nickelSteel);
 
   // The links: each pinned at the arm's pivot (its origin) and the cup's (along its x, as far as its length).
-  const link = (name: string, from: number[], to: number[], band: [number, number]) => {
+  // The links: each pinned at the arm's pivot (its origin) and the cup's (along its x, as far as its length), and cranked
+  // between: bent at a place so far along it (`bend`, a fraction) and so far off to its side (`offset`, toward its z),
+  // so that it reaches round what a straight bar would meet. Its bend is designed, as its pivots are.
+  const link = (name: string, from: number[], to: number[], crank: number[], band: [number, number]) => {
     const [ax, az] = [xc + from[0], from[1]], [cx, cz] = [xc + to[0], to[1]];
     const length = free(mm(Math.hypot(cx - ax, cz - az)));
     const angle = (Math.atan2(cz - az, cx - ax) * 180) / Math.PI;
+    const bend = figure(crank[0], levels.hint, { min: 0.1, max: 0.9 }), offset = hinted(mm(crank[1]), { min: mm(-15), max: mm(15) });
     const w = mm(linkWidth / 2);
-    const a = node(0, 0, 0), b = node(length, 0, 0);
-    // (Along it, places it is checked at: from its arm's end to its cup's.)
-    const along = [0.2, 0.4, 0.6, 0.8].map((s) => node(mul(s, length), 0, 0));
-    const outline = [node(0, 0, minus(w)), node(length, 0, minus(w)), node(length, 0, w), node(0, 0, w)];
-    return part(name, { length, a, b, along, body: slab("body", outline, band[0], band[1], materials.nickelSteel, [undefined, b, undefined, a]) }, {
+    return part(name, (l) => {
+      const a = node(0, 0, 0), b = node(length, 0, 0), k = node(mul(bend, length), 0, offset);
+      // (Each straight piece of it, from one of its places to the next: a bar round ended at each, in its own frame.)
+      const piece = (pname: string, p: Node, q: Node) => part(pname, (s) => {
+        const l0 = dist(p, q), start = node(0, 0, 0), end = node(l0, 0, 0);
+        const outline = [node(0, 0, minus(w)), node(l0, 0, minus(w)), node(l0, 0, w), node(0, 0, w)];
+        return { start, end, outline, body: slab("body", outline, band[0], band[1], materials.nickelSteel, [undefined, end, undefined, start]) };
+      }, { at: frame(p, { x: q, y: l.y }) });
+      // (Along its pieces, places it is checked at: from its arm's end to its bend, and on to its cup's.)
+      const lerp = (p: Node, q: Node, t: number) => node(add(mul(1 - t, p.x), mul(t, q.x)), 0, add(mul(1 - t, p.z!), mul(t, q.z!)));
+      const along = [...[0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1].map((t) => lerp(a, k, t)), ...[0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875].map((t) => lerp(k, b, t))];
+      return { length, bend, offset, a, b, k, along, near: piece("near", a, k), far: piece("far", k, b) };
+    }, {
       at: placed({ joint: joints.planar([0, -1, 0], { u: free(mm(ax), { moves: open }), v: free(mm(az), { moves: open }), angle: free(deg(angle), { moves: open }) }) }),
     });
   };
-  const link1 = link("link 1", guess.A, guess.C, linkBands[0]);
-  const link2 = link("link 2", guess.B, guess.D, linkBands[1]);
+  const link1 = link("link 1", guess.A, guess.C, guess.cranks[0], linkBands[0]);
+  const link2 = link("link 2", guess.B, guess.D, guess.cranks[1], linkBands[1]);
   const pins = (l: typeof link1) => l as unknown as { a: Node; b: Node; along: Node[] };
 
   // What holds as it opens.
@@ -141,7 +153,12 @@ export default part("concealed hinge", (self) => {
   };
   // Nothing of the hinge in the door's wood outside its bore: along each link, and along the arm's edges.
   const clearOf = Object.fromEntries([
-    ...[link1, link2].flatMap((l, i) => pins(l).along.map((p, k) => [`link ${i + 1} at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(5.5, linkWidth / 2)), mm(0)))])),
+    ...[link1, link2].flatMap((l, i) => pins(l).along.map((p, k) => [`link ${i + 1} at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(5.5, 0)), mm(linkWidth / 2)))])),
+    // (And out of the side, by half its width: in front of its face, inside it, or past its outer face.)
+    ...[link1, link2].flatMap((l, i) => pins(l).along.map((p, k) => {
+      const [x, , z] = placeIn(p, self);
+      return [`link ${i + 1} at ${k + 1} out of the side`, must(atLeast(max(x, z, sub(mm(-T), x)), mm(linkWidth / 2)))];
+    })),
     ...along.map((p, k) => [`arm at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(cheeks[1], 0)), mm(0)))]),
   ]);
   return { open, du, dv, turn, door, side, arm, plate, link1, link2, ...hinge, "door's back corner clear of the side": corner(0), "door's front corner clear of the side": corner(3), ...clearOf };
