@@ -1,8 +1,8 @@
 // A girder truss carrying hung commons.
 //
 // A building 16' by 24', its walls 8' tall, of 2x4 at 16". Across its middle, between its side walls, a girder truss of
-// two plies (each a Howe, four panels; their chords nailed together, ten 16d through the face, chord to chord) bears on
-// them where it crosses them. Either side of it, seven common trusses (king posts, every 2') span from the front wall,
+// two plies (each a Howe, four panels; their chords nailed together, ten 10d through the face, chord to chord: 3", as
+// thick as the two) bears on them where it crosses them. Either side of it, seven common trusses (king posts, every 2') span from the front wall,
 // and from the back, to the girder: each bears on its wall at one heel, and at the other is hung on the girder's side,
 // its heel cut plumb against it, in a face-mount hanger on the girder's bottom chord: the lightest of the hangers table
 // that fits a 2x4 and carries its load, checked against its catalog's allowable load. So the girder carries half of
@@ -26,7 +26,7 @@ export default part("girder and hung commons", () => {
   // The girder: its first ply in the plane across the building at y0, its pieces laid from it toward the back, the
   // second on it; their heels at the side walls' outsides, their bottom chords' undersides on their plates.
   const girder = plied("girder", {
-    plies: 2, thickness: chord.thickness, nails: { count: 10, penny: 16 },
+    plies: 2, thickness: chord.thickness, nails: { count: 10, penny: 10 },
     make: (k, f) => howe(`ply ${k + 1}`, { span: width, pitch, panels: 4, chord, web: chord, at: f }),
     at: frame(at(0, y0, height), { x: at(ft(1), y0, height), y: at(0, add(y0, ft(1)), height) }),
   });
