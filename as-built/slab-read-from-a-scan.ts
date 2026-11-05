@@ -20,7 +20,7 @@ export default part("a slab read from a scan", () => {
   const top = free(mm(0));
   // (The slab: 4" of concrete to the walls' outsides, its top through these, the ground under it.)
   const floor = slab("slab", { outline: [[0, 0], [wide, 0], [wide, deep], [0, deep]], top: [node(0, 0, top), node(mm(1000), 0, top), node(0, mm(1000), top)], thickness: inch(4) });
-  const slabTop = floor.top;
+  const slabTop = floor.topFace;
   const w = perimeter("walls", { corners: [node(0, 0, 0), node(wide, 0, 0), node(wide, deep, 0), node(0, deep, 0)], legs: { height, base: top, build: [framing(stud, { spacing: inch(16) })] } });
   // The scan, where it was registered: and where it saw the floor, in its own coordinates.
   const seen = mm.each([[500, 400, -411], [1800, 200, -412], [1100, 1300, -413]]).map(([x, y, z]) => node(x, y, z));

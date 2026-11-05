@@ -23,7 +23,7 @@ const along = mm(2400), back = 3000 - 139.7;
 export default part("lean-to", () => {
   // (The slab runs on past the back, under the wing.)
   const floor = slab("slab", { outline: [[0, 0], [wide, 0], [wide, mm(4400)], [0, mm(4400)]], top: [node(0, 0, 0), node(mm(1000), 0, 0), node(0, mm(1000), mm(10))], thickness: inch(4) });
-  const leg = { base: floor.top, build: [framing(twoBySix, { spacing: inch(16) })] };
+  const leg = { base: floor.topFace, build: [framing(twoBySix, { spacing: inch(16) })] };
   const walls = perimeter("walls", {
     corners,
     names: ["front", "right", "back", "left"],
@@ -37,8 +37,8 @@ export default part("lean-to", () => {
   // (A partition inside, from the back's inside face toward the front, and a wing outside it: each's line its +z face,
   // half its depth from its middle, 1600 from the west end.)
   const x = 4000 - 2400;
-  const partition = wall("partition", { from: node(mm(x - 44.5), mm(back), 0), to: node(mm(x - 44.5), mm(1500), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
-  const wing = wall("wing", { from: node(mm(x + 44.5), mm(3000), 0), to: node(mm(x + 44.5), mm(4200), 0), base: floor.top, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
+  const partition = wall("partition", { from: node(mm(x - 44.5), mm(back), 0), to: node(mm(x - 44.5), mm(1500), 0), base: floor.topFace, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
+  const wing = wall("wing", { from: node(mm(x + 44.5), mm(3000), 0), to: node(mm(x + 44.5), mm(4200), 0), base: floor.topFace, level: mm(2400), build: [framing(twoByFour, { spacing: inch(16) })] });
   const tees = [join(partition.start, walls.legs[2].inside.along(along)), join(wing.start, walls.legs[2].outside.along(along), tee({ lap: false }))];
   return { slab: floor, walls, partition, wing, tees };
 });
