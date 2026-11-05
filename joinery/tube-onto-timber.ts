@@ -20,6 +20,7 @@ import { part, node, member, sections, nominal, DFL, materials, join, fastened, 
 import { cope, housed } from "fettled/tubes";
 import { endOnFace } from "fettled/framing";
 import { weld, glued, nails, bolt } from "fettled/fastenings";
+import { threads } from "fettled/fasteners";
 
 const grade = DFL.No2, steel = materials.chromoly4130N;
 const rail = sections.tube(mm(42.4), mm(2.6));
@@ -41,7 +42,7 @@ export default part("tube and timber", (f) => {
   return {
     feet, timberPost, tubePost, tubeRail, socketedRail, timberRail, peg,
     joints: {
-      high1: join(tubeRail.start, timberPost.along(z.high), fastened(endOnFace(), bolt(mm(10), { length: mm(130) }))),
+      high1: join(tubeRail.start, timberPost.along(z.high), fastened(endOnFace(), bolt(threads.M10, { length: mm(130) }))),
       high2: join(tubeRail.end, tubePost.along(z.high), fastened(cope(), weld())),
       mid1: join(socketedRail.start, timberPost.along(z.mid), fastened(housed({ depth: mm(40) }), glued())),
       mid2: join(socketedRail.end, tubePost.along(z.mid), fastened(cope(), weld())),

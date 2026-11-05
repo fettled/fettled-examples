@@ -14,9 +14,10 @@
 // about the hole as it was drawn. It is bolted there: an M4 socket-head screw (the largest the holes pass) through the
 // flange and the block, its head on the flange, to a nut on the block's far side, as long as that takes.
 
-import { part, node, must, against, hold, designBasis, frame, neg, place, placed, joints, nut, line, span, tslot, tslots, materials, add, sub, mul, ge, mm, deg, as } from "fettled";
+import { part, node, must, against, hold, designBasis, frame, neg, place, placed, joints, line, span, tslot, tslots, materials, add, sub, mul, ge, mm, deg } from "fettled";
 import { folded, flatPattern, type Fold } from "fettled/sheet";
-import { capScrew, capScrewLengths, inSlot } from "fettled/fixings";
+import { inSlot } from "fettled/fixings";
+import { screw, nut, screws, nuts, threads } from "fettled/fasteners";
 import { blockm4 } from "../parts/block-m4";
 
 const outline = ([[0, 0], [60, 0], [60, 70], [0, 70]] as [number, number][]).map((p) => ({ at: mm.each(p), round: mm(5) }));
@@ -43,8 +44,9 @@ export default part("sheet bracket", (root) => {
   const flange = bracket.bend.turn.flange;
   const block = place(blockm4("block"), placed({ origin: [mm(-10), mm(-6), 0] }));
   // (Its screw from the flange's top, through the flange and the block, to a nut on the block's far face.)
-  const [thread, grip] = [mm(4), add(thickness, mm(10))];
-  const length = capScrewLengths.find((l) => ge(l, add(grip, mul(1.1, thread))))!;
+  const [thread, grip] = [threads.M4, add(thickness, mm(10))];
+  const length = screws.iso4762.lengths(thread).find((l) => ge(l, add(grip, mul(1.1, thread.d))))!;
+  const [spec, nutSpec] = [screws.iso4762.of(thread, length), nuts.iso4032.of(thread)];
   const entry = node(0, 0, mm(-2)), exit = node(0, 0, sub(length, thickness));
   const axis = line(entry, exit);
   const mount = part("mount", {
@@ -52,9 +54,9 @@ export default part("sheet bracket", (root) => {
     entry,
     exit,
     axis,
-    screw: capScrew("screw", thread, length, materials.A36, { at: placed({ origin: [0, 0, mm(-2)] }) }),
-    nut: nut("nut", thread, materials.A36, { at: placed({ origin: [0, 0, mm(10)] }) }),
-    fixing: { $: "fixing" as const, designation: `M4x${as(length, mm)} socket head cap screw, hex nut`, diameter: thread, length, joins: [flange, block], axis },
+    screw: screw("screw", spec, { at: placed({ origin: [0, 0, mm(-2)] }) }),
+    nut: nut("nut", nutSpec, { at: placed({ origin: [0, 0, mm(10)] }) }),
+    fixing: { $: "fixing" as const, designation: `${spec.designation}, ${nutSpec.designation}`, diameter: thread.d, length, joins: [flange, block], axis },
   }, { at: frame(flange.centres.m1, { x: flange.x, y: neg(flange.y) }) });
   const fix = (h: "h1" | "h2") => inSlot(h, { piece: bracket.base, centre: bracket.base.centres[h], hole: mm(5.5), thickness, profile: rail, slot: rail.slots["+z"], along: rail.x, across: rail.y });
   return {

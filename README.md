@@ -24,6 +24,7 @@ its parts.
 | [mechanisms/](mechanisms) | A four-bar linkage (doors and drawers opening until they meet something: cabinets/) |
 | [cabinets/](cabinets) | Frameless kitchen cabinets (`fettled/cabinets`): slab, shaker and glass fronts, doors and drawers through their ranges, a run under a counter |
 | [products/](products) | The building products of the tables (`fettled/products`): bricks and blocks, sheet goods, tiles, sidings and trims |
+| [fasteners/](fasteners) | Threads, screws and bolts, nuts and washers (`fettled/fasteners`): the ISO catalog, fasteners said whole of any thread, head, drive and shoulder, two plates bolted and screwed together |
 
 There are also whole things, each a file (with its sidecars, where it has them):
 - [garage-as-built.ts](garage-as-built.ts);
