@@ -22,7 +22,7 @@ its parts.
 | [sheet/](sheet) | A folded bracket (a library part, as another model includes one), a sheet bracket on a T-slot rail, welded seams |
 | [volumes/](volumes) | Extrusions ended on faces, a revolve, a sweep, a loft, a carve, a clearance, sweeps bent round their corners (a downpipe, a cable), ribbon cables bent without stretching (laid by hand, found from where they plug in, and connected board to board) |
 | [mechanisms/](mechanisms) | A four-bar linkage (doors and drawers opening until they meet something: cabinets/) |
-| [cabinets/](cabinets) | Frameless kitchen cabinets (`fettled/cabinets`): slab, shaker and glass fronts, doors and drawers through their ranges, a run under a counter |
+| [cabinets/](cabinets) | Frameless kitchen cabinets (`fettled/cabinets`): slab, shaker and glass fronts, doors and drawers through their ranges, a run under a counter; their pulls and knobs (`fettled/hardware`), each of the tables and some said by their sizes on sample boards |
 | [products/](products) | The building products of the tables (`fettled/products`): bricks and blocks, sheet goods, tiles, sidings and trims |
 | [fasteners/](fasteners) | Threads, screws and bolts, nuts and washers (`fettled/fasteners`): the ISO catalog, fasteners said whole of any thread, head, drive and shoulder, two plates bolted and screwed together |
 
