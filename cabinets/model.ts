@@ -6,13 +6,15 @@
 //
 // The run: a sink base of two shaker doors, a drawer base, and a base with a drawer over doors, side by side under a
 // laminate counter 1" over their fronts; a wall cabinet of glass doors over the sink, 18" above the counter. Placed by
-// hand, standing alone: the kitchen beside them is how cabinets are laid in runs along walls and hung on them.
+// hand, standing alone: the kitchen and the diagonal corner beside them are how cabinets are laid in runs along walls
+// and hung on them.
 
 import { part, place, placed, plane, node, support, mm, inch } from "fettled";
 import { cabinet, counter, doors, drawer, glass, shaker } from "fettled/cabinets";
 import baseWithADrawerAndDoors from "./base-with-a-drawer-and-doors";
 import wallWithGlassDoors from "./wall-with-glass-doors";
 import kitchen from "./kitchen";
+import diagonalCorner from "./diagonal-corner";
 
 export default part("cabinets", () => {
   const floor = [node(0, 0, 0), node(mm(1), 0, 0), node(0, mm(1), 0)];
@@ -32,6 +34,7 @@ export default part("cabinets", () => {
       baseWithADrawerAndDoors: place(baseWithADrawerAndDoors, placed({ origin: [inch(110), 0, 0] })),
       wallWithGlassDoors: place(wallWithGlassDoors, placed({ origin: [inch(164), 0, 0] })),
       kitchen: place(kitchen, placed({ origin: [inch(-260), inch(-60), 0] })),
+      diagonalCorner: place(diagonalCorner, placed({ origin: [inch(-260), inch(100), 0] })),
     }),
   };
 });
