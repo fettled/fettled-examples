@@ -23,6 +23,9 @@ const osb = panels(sheets.osb7_16), gwb = panels(sheets.gwb1_2, { laid: "horizon
 const studs = framing(stud, { spacing: inch(16) });
 // (Each build-up from outside in.)
 const brick = [masonry(bricks.usModular), osb, studs, gwb];
+// (The right's raked top capped: a course of bricks on edge along it, each square to the slope; the front's cut to its
+// line, as under a frieze.)
+const capped = [masonry(bricks.usModular, { rake: "capped" }), osb, studs, gwb];
 const lap = [siding(profiles.bevel1x8), osb, studs, gwb];
 
 export default part("brick and siding", () => {
@@ -34,7 +37,7 @@ export default part("brick and siding", () => {
     names: ["front", "right", "back", "left"],
     legs: [
       { height: high, build: brick, openings: [{ label: "W1", kind: "window", centre: mm(1830), width: mm(900), head: mm(2032), height: mm(1000), header }] },
-      { height: [high, low], build: brick },
+      { height: [high, low], build: capped },
       { height: low, build: lap, openings: [{ label: "D1", kind: "door", centre: mm(1830), width: mm(900), head: ft(6), header }] },
       { height: [low, high], build: lap },
     ],
