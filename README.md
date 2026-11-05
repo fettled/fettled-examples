@@ -15,7 +15,7 @@ its parts.
 | Topic | What its examples show |
 |---|---|
 | [joinery/](joinery) | How members meet: butt, cope, mitre, lap, housing, birdsmouth, mortise and tenon, tube onto timber |
-| [walls/](walls) | Walls as legs (`fettled/walls`), each made of its build-up (framing, sheathing, gypsum board): a shed, an L, a lean-to |
+| [walls/](walls) | Walls as legs (`fettled/walls`), each made of its build-up (framing, sheathing, gypsum board, siding, a brick veneer): a shed, an L, a lean-to, a shed clad in brick and siding |
 | [floors/](floors) | A second storey, a stairwell, an open-web floor, what a floor and a roof are made of |
 | [roofs/](roofs) | Hips, valleys, a dormer, a girder truss, trusses of your own, the truss types |
 | [as-built/](as-built) | Taped, surveyed, scanned or already made, and the rest found to suit (and the table library) |
