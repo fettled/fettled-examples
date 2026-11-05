@@ -11,7 +11,7 @@
 // The hinge's design is its pivots: free, each hinted where a first guess (a search of linkages) puts it. Its motion
 // opens the door: its angle 110° times the motion's time; at time 0 shut (where it is drawn). At every time each link
 // is pinned at its ends (a link is rigid: its length is designed, as its pivots are); the door's hinged edge clear of the
-// side (in front of its face, or past its outer face); and every place along the links and round the arm's end either
+// side (in front of its face, or past its outer face); and every place along the links and along the arm's edges either
 // out of the door's wood (behind its back, in front of its face, past its edge) or within the cup's bore (its half-width
 // at the height across the hinge each is at: the bore is round). Its pivots are apart (8 mm on the arm, 6 in the cup):
 // two links, not one on the other. What must hold moves the pivots from their guess; what gives way (the hints) says by
@@ -34,7 +34,7 @@ const floorAt = cupDepth - cupFloor - 0.3;
 // The first guess at the pivots (the arm's A and B, the cup's C and D: A to C and B to D), across from the cup's middle
 // and deep into the door from its back: a search of linkages for one that keeps what this says (scratch, in the plane
 // across, more finely sampled), each pivot kept apart from the other as this does.
-const guess = { A: [10.3, 9.4], B: [13.04, -10.25], C: [-10.98, 6.74], D: [-14.16, 1.3] };
+const guess = { A: [16, -10], B: [30, -2.47], C: [-14.41, 1.29], D: [-8.22, 2.38] };
 const pivot = ([a, d]: number[]) => node(hinted(mm(xc + a)), 0, hinted(mm(d)));
 
 /** A slab across the hinge: its outline's corners (nodes in the frame of the part it is of, at y = 0) carried along that
@@ -90,8 +90,13 @@ export default part("concealed hinge", (self) => {
     node(add(A.x, m), 0, add(A.z!, m)), node(sub(A.x, m), 0, add(A.z!, m)), node(sub(A.x, m), 0, sub(A.z!, m)),
     node(mm(x0), 0, sub(A.z!, m)),
   ];
+  // (Along each edge of its outline but the one on its plate, places it is checked at.)
+  const along = armOutline.slice(1).flatMap((a, i) => {
+    const b = armOutline[(i + 2) % armOutline.length];
+    return [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875].map((t) => node(add(mul(1 - t, a.x), mul(t, b.x)), 0, add(mul(1 - t, a.z!), mul(t, b.z!))));
+  });
   const arm = part("arm", {
-    A, B, outline: armOutline,
+    A, B, outline: armOutline, along,
     upper: slab("upper cheek", armOutline, cheeks[0], cheeks[1], materials.nickelSteel),
     lower: slab("lower cheek", armOutline, -cheeks[1], -cheeks[0], materials.nickelSteel),
   });
@@ -134,10 +139,10 @@ export default part("concealed hinge", (self) => {
     const [x, , z] = placeIn((door as unknown as { corners: Node[] }).corners[k], self);
     return must(atLeast(max(z, sub(mm(-T), x)), mm(0)));
   };
-  // Nothing of the hinge in the door's wood outside its bore: along each link, and round the arm's end.
+  // Nothing of the hinge in the door's wood outside its bore: along each link, and along the arm's edges.
   const clearOf = Object.fromEntries([
     ...[link1, link2].flatMap((l, i) => pins(l).along.map((p, k) => [`link ${i + 1} at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(5.5, linkWidth / 2)), mm(0)))])),
-    ...armOutline.slice(2).map((p, k) => [`arm at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(cheeks[1], 0)), mm(0)))]),
+    ...along.map((p, k) => [`arm at ${k + 1} clear`, must(atLeast(clear(p, door, halfWidth(cheeks[1], 0)), mm(0)))]),
   ]);
   return { open, du, dv, turn, door, side, arm, plate, link1, link2, ...hinge, "door's back corner clear of the side": corner(0), "door's front corner clear of the side": corner(3), ...clearOf };
 });
