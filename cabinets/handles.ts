@@ -10,7 +10,7 @@
 // no table has; the row behind it, the tables' handles.
 
 import { part, placed, plane, node, support, mm, inch, materials } from "fettled";
-import { threads } from "fettled/fasteners";
+import { unc } from "fettled/fasteners";
 import { sheets, panel } from "fettled/products";
 import { leaf, mounted, centred, start, end, handles, knobs, pulls, section, type Handle } from "fettled/hardware";
 
@@ -30,7 +30,7 @@ function board(name: string, h: Handle, k: number, row: number) {
 /** Handles said by their sizes. */
 const said: Record<string, Handle> = {
   longBar: pulls.bar({ cc: mm(192), projection: mm(38), bar: section.rect(mm(16), mm(8), { corner: mm(2) }), post: mm(12), overhang: mm(16), material: materials.zincBlack }),
-  wire: pulls.d({ cc: inch(3), projection: mm(28), section: section.round(mm(6)), radius: mm(6), thread: threads.UNC8_32 }),
+  wire: pulls.d({ cc: inch(3), projection: mm(28), section: section.round(mm(6)), radius: mm(6), thread: unc["#8"] }),
   bigKnob: knobs.round({ d: mm(38), height: mm(30), crown: mm(12), neck: mm(16), foot: mm(22), material: materials.brass }),
   flatArch: pulls.arch({ cc: mm(128), projection: mm(30), section: section.rect(mm(12), mm(5), { corner: mm(1) }), material: materials.stainless304 }),
 };
