@@ -68,7 +68,7 @@ function screwTray(std: ScrewStandard): Laid | undefined {
           // (Its axis down, its tip on the tray: its bearing face as high as it is long overall; a shoulder screw's
           // length, as its standard names it, is its shoulder's.)
           const s = std.of(r.t, length);
-          const at = placed({ origin: [mm(x0 + RIM + p * (j + 0.5)), mm(y + p / 2), s.length], x: [1, 0, 0], y: [0, -1, 0] });
+          const at = placed({ origin: [mm(x0 + RIM + p * (j + 0.5)), mm(y + p / 2), s.length as Length], x: [1, 0, 0], y: [0, -1, 0] });
           out[keyOf(`${r.t.label} x ${said(std, length)}`)] = screw(`${std.standard} ${r.t.label} x ${said(std, length)}`, s, { at, threads: "modelled" });
         });
         y += p;
