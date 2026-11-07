@@ -4,17 +4,20 @@
 // Threads, screws and bolts, nuts and washers (fettled/fasteners): the standards' catalog (ISO 4762, 10642, 7380-1,
 // 4014, 4017, 7045, 7046-1, 1207, 7379, 4026; nuts ISO 4032, 4035; washers ISO 7089, 7092), fasteners said whole of
 // any thread, head, drive, shoulder and material, and two plates fixed by them (fettled/fixings); and the inch catalog
-// (ASME B18: Unified threads, socket, hex and machine screws, nuts and washers).
+// (ASME B18: Unified threads, socket, hex and machine screws, nuts and washers); and behind them all, every fastener of the
+// tables at every size and length, a drawer of some three thousand (all.ts).
 
 import { part, place, placed, mm } from "fettled";
 import catalog from "./catalog";
 import custom from "./custom";
 import bolted from "./bolted";
 import inchCatalog from "./inch";
+import everything from "./all";
 
 export default part("fasteners", {
   catalog: place(catalog, placed({ origin: [0, 0, 0] })),
   custom: place(custom, placed({ origin: [0, mm(60), 0] })),
   bolted: place(bolted, placed({ origin: [0, mm(120), 0] })),
   inch: place(inchCatalog, placed({ origin: [0, mm(-60), 0] })),
+  all: place(everything, placed({ origin: [0, mm(300), 0] })),
 });
