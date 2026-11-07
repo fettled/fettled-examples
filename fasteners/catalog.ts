@@ -14,14 +14,16 @@ export default part("fastener catalog", () => {
   const next = (w: number) => { const at = x; x += w; return placed({ origin: [mm(at), 0, 0], x: [1, 0, 0], y: [0, -1, 0] }); };
   // (An M6 where the standard has one, else its largest below.)
   const size = (ts: readonly Thread[]) => ts.find((t) => t.label === "M6") ?? ts.filter((t) => t.series === "coarse").pop()!;
-  const all = Object.fromEntries(Object.entries(screws).map(([k, std]) => {
+  // (The ISO standards: the inch ones are inch.ts's.)
+  const iso = <T,>(o: Record<string, T>) => Object.entries(o).filter(([k]) => k.startsWith("iso"));
+  const all = Object.fromEntries(iso(screws).map(([k, std]) => {
     const t = size(std.threads);
     const lengths = std.lengths(t);
     const length = lengths.find((l) => as(l, mm) >= 20) ?? lengths[lengths.length - 1];
     return [k, screw(`${std.standard} ${t.label}`, std.of(t, length, k === "iso7379" ? { shoulder: mm(12) } : {}), { at: next(20) })];
   }));
-  const nutsOf = Object.fromEntries(Object.entries(nuts).map(([k, std]) => [k, nut(`${std.standard} M6`, std.of(threads.M6), { at: next(20) })]));
-  const washersOf = Object.fromEntries(Object.entries(washers).map(([k, std]) => [k, washer(`${std.standard} M6`, std.of(threads.M6), { at: next(20) })]));
+  const nutsOf = Object.fromEntries(iso(nuts).map(([k, std]) => [k, nut(`${std.standard} M6`, std.of(threads.M6), { at: next(20) })]));
+  const washersOf = Object.fromEntries(iso(washers).map(([k, std]) => [k, washer(`${std.standard} M6`, std.of(threads.M6), { at: next(20) })]));
   return { screws: all, nuts: nutsOf, washers: washersOf };
 });
 
