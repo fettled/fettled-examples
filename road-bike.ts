@@ -2,8 +2,8 @@
 // docs/sketches/road-bike.ts made real). As examples/bike.ts lays it out, but:
 //
 // - The chart's figures are published rounded, so each is a reading (`measured`, to within half a millimetre or a
-//   twentieth of a degree), and both wheels on the ground is what must hold: the solve says which figure gave way,
-//   and by how much.
+//   twentieth of a degree), and both wheels on the ground with the bar straight is what must hold: the solve says
+//   which figure gave way, and by how much. The chart is the frame's: turned, the bar pitches the bike, not the chart.
 // - What the frame is made of and how its tubes meet is one choice (a scenario): steel brazed into lugs, each lug
 //   chosen by the angle its tubes meet at (and said where none of the set bends that far); aluminium coped and TIG
 //   welded; or carbon moulded in one piece. Each fastening asks what it joins: a weld or a braze joins metals, what is
@@ -67,7 +67,13 @@ const wheelRadius = mm(336), rearHub = mm(130), frontHub = mm(100), shellWidth =
 const crown = tube(mm(28.6), mm(2.0)), steererTube = tube(mm(28.6), mm(1.55)), stemTube = tube(mm(31.8), mm(2.0)), barTube = tube(mm(23.8), mm(1.6));
 
 export default part("road bike", (bike) => {
-  const ahead = bike.x, back = neg(bike.x), across = bike.y;
+  // The frame is built level, as its chart is measured: both wheels on the ground, the bar straight. The bike stands on the
+  // ground pitched from that about its rear axle, as far as its front wheel on the ground says: turning the bar lowers
+  // the front by the fork's rake, and the bike pitches; the chart, which is the frame's, does not change.
+  const rearAxle = node(0, 0, wheelRadius);
+  const pitch = free(deg(0));
+  const level = part("level", {}, { at: frame(rearAxle, { x: bike.x, y: bike.y, joint: joints.hinge([0, 1, 0], pitch) }) });
+  const ahead = level.x, back = neg(level.x), across = level.y, up = level.z;
   const lengthWithin = mm(0.5), angleWithin = deg(0.05);
   // The chart (Ritchey Road Logic, size 55): readings, each to within what it is rounded to.
   const chart = {
@@ -84,7 +90,6 @@ export default part("road bike", (bike) => {
   const line = <P extends Record<string, Node>>(name: string, from: Geo, way: Basis, angle: Num<"angle">, points: P) =>
     part(name, points, { at: frame(from, { x: way, y: across, joint: joints.hinge([0, 1, 0], angle) }) });
 
-  const rearAxle = node(0, 0, wheelRadius);
   const chainLine = line("chainstay line", rearAxle, ahead, free(deg(10)), {
     bb: node(chart.chainstay, 0, 0), shellL: node(chart.chainstay, left(shellWidth), 0), shellR: node(chart.chainstay, right(shellWidth), 0),
     dropoutL: node(0, left(rearHub), 0), dropoutR: node(0, right(rearHub), 0),
@@ -93,9 +98,10 @@ export default part("road bike", (bike) => {
     top: node(chart.seatTube, 0, 0), inside: node(sub(chart.seatTube, fit.insert), 0, 0), saddle: node(add(chart.seatTube, fit.seatpost), 0, 0),
   });
   const headTop = part("head tube top", { top: node(0, 0, 0) }, { at: frame(chainLine.bb, { x: ahead, y: across, joint: joints.moves({ x: chart.reach, y: mm(0), z: chart.stack }) }) });
-  const headLine = line("head tube line", headTop.top, ahead, chart.headAngle, { crown: node(chart.headTube, 0, 0) });
-  // What turns in the headset: the fork, steerer, stem and bar, about the head tube's axis by `turn`.
   const forkAlong = free(mm(370)), fork = add(chart.headTube, forkAlong), above = mul(-1, fit.spacers);
+  // (Where the front axle is with the bar straight: what the chart is measured with.)
+  const headLine = line("head tube line", headTop.top, ahead, chart.headAngle, { crown: node(chart.headTube, 0, 0), straightAxle: node(fork, 0, chart.rake) });
+  // What turns in the headset: the fork, steerer, stem and bar, about the head tube's axis by `turn`.
   const steered = part("steered", {
     crown: node(chart.headTube, 0, 0), crownL: node(chart.headTube, left(frontHub), 0), crownR: node(chart.headTube, right(frontHub), 0),
     frontAxle: node(fork, 0, chart.rake), frontL: node(fork, left(frontHub), chart.rake), frontR: node(fork, right(frontHub), chart.rake),
@@ -114,7 +120,7 @@ export default part("road bike", (bike) => {
   // (Its x along the chainstay's line, toward the bottom bracket; its y up: the chainstay's socket ahead of the axle, the
   // seatstay's above it. The chainstay's is across the block where the chainstay's line from the bottom bracket goes
   // through the axle, as a chainstay is aimed.)
-  const drop = (n: Node) => dropout("dropout", { size: mm(56), thickness: mm(36), material: s.dropouts, sockets: { chainstay: [mm(18), 0, free(mm(0))], seatstay: [mm(6), mm(18)] }, at: frame(n, { x: chainLine.x, y: bike.z }) });
+  const drop = (n: Node) => dropout("dropout", { size: mm(56), thickness: mm(36), material: s.dropouts, sockets: { chainstay: [mm(18), 0, free(mm(0))], seatstay: [mm(6), mm(18)] }, at: frame(n, { x: chainLine.x, y: up }) });
   const [dropL, dropR] = [drop(chainLine.dropoutL), drop(chainLine.dropoutR)];
   const chainL = member("chainstay", s.chainstay, m, { from: bb, to: dropL.sockets.chainstay, y: across });
   const chainR = member("chainstay", s.chainstay, m, { from: bb, to: dropR.sockets.chainstay, y: across });
@@ -131,16 +137,18 @@ export default part("road bike", (bike) => {
   const post = member("seatpost", s.post, cockpit, { from: seatLine.inside, to: seatLine.saddle, y: across });
 
   return {
-    chart, fit, turn, rearAxle, forkAlong, chainLine, seatLine, headTop, headLine, steered,
+    chart, fit, turn, pitch, level, rearAxle, forkAlong, chainLine, seatLine, headTop, headLine, steered,
     shell, headT, seatT, downT, topT, dropL, dropR, chainL, chainR, stayL, stayR, rear, forkCrown, bladeL, bladeR, front, steerer, stem, bar, post,
     // (Its load paths where one tube sits in another: the seatpost in the seat tube, the steerer in the head tube.)
     rests: [bears(post, seatT), bears(steerer, headT)],
     says: {
-      drop: must(offset(chainLine.bb, rearAxle, bike.z, chart.bbDrop)),
+      drop: must(offset(chainLine.bb, rearAxle, up, chart.bbDrop)),
+      // Level as the chart is measured: the front axle, with the bar straight, as high as the rear.
+      level: must(offset(rearAxle, headLine.straightAxle, up, mm(0))),
       "left chainstay aimed at the axle": must(on(dropL.sockets.chainstay.node, lineThrough(chainLine.bb, chainLine.dropoutL))),
       "right chainstay aimed at the axle": must(on(dropR.sockets.chainstay.node, lineThrough(chainLine.bb, chainLine.dropoutR))),
       forkLength: must(distance(steered.crown, steered.frontAxle, chart.forkLength)),
-      // Both wheels on the ground (the rear axle is put there): the chart gives way to this.
+      // Both wheels on the ground (the rear axle is put there): the bike pitches to it.
       "front wheel on the ground": must(offset(bike.origin, steered.frontAxle, bike.z, wheelRadius)),
     },
     holds: [hold(chainLine.dropoutL, "pinned"), hold(chainLine.dropoutR, { x: true, z: true }), hold(steered.frontL, { y: true, z: true }), hold(steered.frontR, { z: true })],
