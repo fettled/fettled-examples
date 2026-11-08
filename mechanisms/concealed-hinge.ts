@@ -16,7 +16,7 @@
 // Nothing else is said of it (what it is to clear, where its pivots may be): its lengths between its pivots are hinted,
 // round numbers, and the rest is where it is drawn. Drag the door at a time to see how far it may go.
 
-import { part, node, line, free, hinted, placed, frame, joints, motion, must, equal, coincide, dist, add, mul, cut, extrusion, revolve, polygon, mm, deg, materials, type Corner, type Node } from "fettled";
+import { part, node, line, free, hinted, placed, frame, joints, motion, must, equal, coincide, dist, add, mul, cut, extrusion, revolve, polygon, mm, deg, materials, type Corner, type Node, type Param } from "fettled";
 import { sheets } from "fettled/products";
 
 // The side, the door and the cup (mm).
@@ -44,7 +44,7 @@ function slab(name: string, corners: Node[], y0: number, y1: number, material: t
 }
 
 /** A link, round ended, from its origin along its x as far as its length (`length`), `band` across the hinge. */
-function bar(length: ReturnType<typeof free>, band: [number, number]) {
+function bar(length: Param<"length">, band: [number, number]) {
   const w = mm(linkWidth / 2), minus = mm(-linkWidth / 2);
   const a = node(0, 0, 0), b = node(length, 0, 0);
   const outline = [node(0, 0, minus), node(length, 0, minus), node(length, 0, w), node(0, 0, w)];
@@ -104,7 +104,7 @@ export default part("concealed hinge", (self) => {
   }, { at: frame(B, { x: self.x, y: self.y, joint: joints.hinge([0, -1, 0], link2Turn) }) });
 
   const door = (link1 as unknown as { door: { K: Node; C: Node; D: Node } }).door;
-  const doorTurn = (link1 as unknown as { doorTurn: ReturnType<typeof free> }).doorTurn;
+  const doorTurn = (link1 as unknown as { doorTurn: Param<"angle"> }).doorTurn;
   const end2 = (link2 as unknown as { b: Node }).b;
   // Where its corner is, shut: a door in full overlay.
   const shut = node(mm(e), 0, 0);
