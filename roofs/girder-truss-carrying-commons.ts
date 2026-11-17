@@ -34,8 +34,8 @@ export default part("girder and hung commons", () => {
   // The commons: from the front wall's outside to the girder's near face; from the back wall's outside to its far face
   // (laid out from the back right corner, along −x, so that they rise the same way).
   const common = (f: ReturnType<typeof frame>) => kingPost("truss", { span, pitch, chord, web: chord, at: f });
-  const front = trussRow("front commons", { stations, height: mm(0), make: (_, f) => common(f), at: frame(at(0, 0, height), { x: at(ft(1), 0, height), y: at(0, ft(1), height) }) });
-  const back = trussRow("back commons", { stations, height: mm(0), make: (_, f) => common(f), at: frame(at(width, depth, height), { x: at(sub(width, ft(1)), depth, height), y: at(width, sub(depth, ft(1)), height) }) });
+  const front = trussRow("front commons", { stations, thickness: chord.thickness, height: mm(0), make: (_, f) => common(f), at: frame(at(0, 0, height), { x: at(ft(1), 0, height), y: at(0, ft(1), height) }) });
+  const back = trussRow("back commons", { stations, thickness: chord.thickness, height: mm(0), make: (_, f) => common(f), at: frame(at(width, depth, height), { x: at(sub(width, ft(1)), depth, height), y: at(width, sub(depth, ft(1)), height) }) });
   // (Each common's top chord at its hung heel, its second: cut against the girder's side it is hung on (what of it is
   // past that face, taken off), and held to the girder's bottom chord by a hanger.)
   const rows = [[front, near], [back, far]] as const;

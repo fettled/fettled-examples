@@ -52,8 +52,8 @@ export default part("a roof that turns a corner", () => {
   // The bar's trusses, across it, every 24" along it; the wing's, across it, from its front back to the bar's eave
   // (short of its tails, which run out 12" past its wall). Each bottom chord's underside on the plates.
   const truss = (span: number) => (k: number, f: ReturnType<typeof frame>) => fink(`truss ${k + 1}`, { span: inch(span), pitch, overhang: inch(12), stock: chord, at: f });
-  const bars = trussRow("bar trusses", { stations: row(inch(bar), inch(24), chord.thickness), height: mm(0), make: truss(deep), at: rowFrame([0, 0], [1, 0], plate + d / 2) });
-  const wings = trussRow("wing trusses", { stations: row(inch(out - 18), inch(24), chord.thickness), height: mm(0), make: truss(wing), at: rowFrame([from + wing, -out], [0, 1], plate + d / 2) });
+  const bars = trussRow("bar trusses", { stations: row(inch(bar), inch(24), chord.thickness), thickness: chord.thickness, height: mm(0), make: truss(deep), at: rowFrame([0, 0], [1, 0], plate + d / 2) });
+  const wings = trussRow("wing trusses", { stations: row(inch(out - 18), inch(24), chord.thickness), thickness: chord.thickness, height: mm(0), make: truss(wing), at: rowFrame([from + wing, -out], [0, 1], plate + d / 2) });
   // The valley set: from the bar's front wall (y 0) every 24" up its slope, each a Fink of the wing's pitch laid from
   // its station up the slope, its bottom chord's underside on the bar's top chords at its uphill edge, its heels where
   // its tops are in the wing's planes; while it is long enough to cross two of the bar's trusses.

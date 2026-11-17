@@ -38,7 +38,7 @@ export default part("trusses on a header", (self) => {
   const span = add(depth, div(beamWidth, 2));
   const stations = row(width, inch(24), twoByFour.thickness);
   const roof = trussRow("trusses", {
-    stations, height: wallHeight,
+    stations, thickness: twoByFour.thickness, height: wallHeight,
     shift: { 2: mm(19) },
     make: (n, at) => n === stations.length - 1
       // (The gable: studs from its bottom chord to its top chords, at its quarters and its middle.)

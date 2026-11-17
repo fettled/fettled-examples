@@ -50,7 +50,7 @@ export default part("standard truss types", () => {
     // plates.)
     const z = name === "Fink" ? add(height, div(chord.depth, 2)) : height;
     const trusses = trussRow(`${name} trusses`, {
-      stations: row(bay, inch(24), chord.thickness), height: mm(0), make: (_, f) => make(f),
+      stations: row(bay, inch(24), chord.thickness), thickness: chord.thickness, height: mm(0), make: (_, f) => make(f),
       at: frame(at(0, 0, z), { x: at(ft(1), 0, z), y: at(0, ft(1), z) }),
     });
     // (Its load path: the trusses on the walls.)
