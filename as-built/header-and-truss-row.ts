@@ -59,10 +59,10 @@ export default part("trusses on a header", (self) => {
   const build = layers(weights.asphaltShingles, weights.roofingFelt, sheets.osb7_16);
   const [y0, peak, y1] = [-3 * 38.1 / 2 - 304.8, -3 * 38.1 / 2 + as(span, mm) / 2, -3 * 38.1 / 2 + as(span, mm) + 304.8];
   type Chord = Parameters<typeof facing>[0];
-  const first = roof.trusses[0] as unknown as Record<"left" | "right", Chord>, gable = roof.trusses[stations.length - 1] as unknown as { top: Chord[] };
+  const [first, gable] = [roof.trusses[0], roof.trusses[stations.length - 1]] as unknown as { top: Chord[] }[];
   const slope = (name: string, side: 0 | 1, from: number, to: number) => {
     const c = covering(name, { outline: [[0, mm(from)], [width, mm(from)], [width, mm(to)], [0, mm(to)]], under: [[0, mm(from), free(wallHeight)], [width, mm(from), free(wallHeight)], [0, mm(to), free(wallHeight)]], build, on: roof });
-    const [onFirst, onGable] = [facing(first[side === 0 ? "left" : "right"], self.z), facing(gable.top[side], self.z)];
+    const [onFirst, onGable] = [facing(first.top[side], self.z), facing(gable.top[side], self.z)];
     return { covering: c, weight: c.weight!, rests: { [`${name} on the first truss`]: must(on(c.under[0], onFirst)), [`${name} on the gable`]: must(on(c.under[1], onGable)), [`${name} up the first truss`]: must(on(c.under[2], onFirst)) } };
   };
   const coverings = { front: slope("front slope", 0, y0, peak), back: slope("back slope", 1, peak, y1) };

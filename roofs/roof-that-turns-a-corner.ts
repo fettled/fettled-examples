@@ -22,10 +22,10 @@ import { sheets } from "fettled/products";
 const chord = lumber(nominal["2x4"], DFL.No2);
 const pitch = 6 / 12;
 // (In inches: the walls' plates' top; a 2x4's depth; where a Fink's top chords' tops are over its bottom chord's
-// underside at its heels, which are on the walls' outsides: its axes meet half a depth up, and its top chord's top is
-// half a depth square to its slope over that.)
+// underside at its heels, which are on the walls' outsides: its top chords' undersides meet its bottom chord's there,
+// and a top chord's top is its depth square to its slope over that.)
 const [plate, d, chord_t] = [96, 3.5, 1.5];
-const heel = d / 2 + (d / 2) * Math.hypot(1, pitch);
+const heel = d * Math.hypot(1, pitch);
 const [bar, deep, wing, out, from] = [360, 192, 144, 120, 90];
 const eave = (h: number) => ({ pitch, height: [inch(h), inch(h)] as [Length, Length], overhang: inch(12) });
 const at = (x: number, y: number, z = 0) => node(inch(x), inch(y), z === 0 ? 0 : inch(z));
